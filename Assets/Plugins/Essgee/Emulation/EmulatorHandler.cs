@@ -154,7 +154,7 @@ namespace Essgee.Emulation
 
 		public string GetSaveStateFilename(int number)
 		{
-			return Path.Combine(StandInfo.SaveStatePath, $"{Path.GetFileNameWithoutExtension(currentGameMetadata.FileName)} (State {number:D2}).est");
+			return Path.Combine(EmuStandInfo.SaveStatePath, $"{Path.GetFileNameWithoutExtension(currentGameMetadata.FileName)} (State {number:D2}).est");
 		}
 
 		public void LoadState(int number)
@@ -175,7 +175,7 @@ namespace Essgee.Emulation
 
 			byte[] ramData = new byte[currentGameMetadata.RamSize];
 
-			var savePath = Path.Combine(StandInfo.SaveDataPath, Path.ChangeExtension(currentGameMetadata.FileName, "sav"));
+			var savePath = Path.Combine(EmuStandInfo.SaveDataPath, Path.ChangeExtension(currentGameMetadata.FileName, "sav"));
 			if (File.Exists(savePath))
 				ramData = File.ReadAllBytes(savePath);
 
@@ -193,7 +193,7 @@ namespace Essgee.Emulation
 				cartRamSaveNeeded)
 			{
 				var ramData = emulator.GetCartridgeRam();
-				var savePath = Path.Combine(StandInfo.SaveDataPath, Path.ChangeExtension(currentGameMetadata.FileName, "sav"));
+				var savePath = Path.Combine(EmuStandInfo.SaveDataPath, Path.ChangeExtension(currentGameMetadata.FileName, "sav"));
 				File.WriteAllBytes(savePath, ramData);
 			}
 		}

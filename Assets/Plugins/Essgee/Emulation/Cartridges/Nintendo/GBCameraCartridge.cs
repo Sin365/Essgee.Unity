@@ -276,7 +276,7 @@ namespace Essgee.Emulation.Cartridges.Nintendo
 					switch (imageSourceType)
 					{
 						case ImageSources.File: value = webcamOutput[i, j]; break;
-						case ImageSources.Noise: value = StandInfo.Random.Next(255); break;
+						case ImageSources.Noise: value = EmuStandInfo.Random.Next(255); break;
 					}
 
 					value = (value * exposureBits) / 0x0300;

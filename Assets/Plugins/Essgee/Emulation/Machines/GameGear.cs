@@ -178,7 +178,7 @@ namespace Essgee.Emulation.Machines
 			vdp?.SetRefreshRate(refreshRate);
 			vdp?.SetRevision(1);
 
-			psg?.SetSampleRate(StandInfo.Configuration.SampleRate);
+			psg?.SetSampleRate(EmuStandInfo.Configuration.SampleRate);
 			psg?.SetOutputChannels(2);
 			psg?.SetClockRate(psgClock);
 			psg?.SetRefreshRate(refreshRate);

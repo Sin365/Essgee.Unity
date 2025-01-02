@@ -7,7 +7,18 @@ using System;
 
 namespace Essgee.Emulation.Configuration
 {
-    //todo Unity [ElementPriority(5)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class ElementPriorityAttribute : Attribute
+    {
+        public int Priority { get; set; }
+
+        public ElementPriorityAttribute(int priority)
+        {
+            Priority = priority;
+        }
+    }
+
+    [ElementPriority(5)]
     public class GameBoy : IConfiguration
 	{
 		//todo Unity [CheckBoxControl("General", "Use Bootstrap ROM")]

@@ -12,7 +12,7 @@ namespace Essgee.Emulation
 {
     public static class SaveStateHandler
 	{
-		public static string ExpectedVersion = $"ESGST{new Version(StandInfo.ProductVersion).Major:D3}";
+		public static string ExpectedVersion = $"ESGST{new Version(EmuStandInfo.ProductVersion).Major:D3}";
 
 		public static Dictionary<string, dynamic> Load(Stream stream, string machineName)
 		{

@@ -218,7 +218,7 @@ namespace Essgee.Emulation.Machines
 			video?.SetRevision(0);
 
 			/* Audio */
-			audio?.SetSampleRate(StandInfo.Configuration.SampleRate);
+			audio?.SetSampleRate(EmuStandInfo.Configuration.SampleRate);
 			audio?.SetOutputChannels(2);
 			audio?.SetClockRate(masterClock);
 			audio?.SetRefreshRate(refreshRate);
@@ -534,7 +534,7 @@ namespace Essgee.Emulation.Machines
 					break;
 
 				case InfraredSources.Random:
-					irNotReceivingSignal = (StandInfo.Random.Next(256) % 2) == 0;
+					irNotReceivingSignal = (EmuStandInfo.Random.Next(256) % 2) == 0;
 					break;
 
 				case InfraredSources.ConstantOn:

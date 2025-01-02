@@ -20,8 +20,8 @@ namespace Essgee.Metadata
 {
 	public class GameMetadataHandler
 	{
-		readonly static string datDirectoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "No-Intro");
-		readonly static string metadataDatabaseFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "MetadataDatabase.json");
+		//static string datDirectoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "No-Intro");
+		//static string metadataDatabaseFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "MetadataDatabase.json");
 
 		readonly Dictionary<string, DatFile> datFiles;
 		readonly List<CartridgeJSON> cartMetadataDatabase;
@@ -38,18 +38,18 @@ namespace Essgee.Metadata
 
 			/* Read No-Intro .dat files */
 			datFiles = new Dictionary<string, DatFile>();
-			foreach (var file in Directory.EnumerateFiles(datDirectoryPath, "*.dat"))
+			foreach (var file in Directory.EnumerateFiles(EmuStandInfo.datDirectoryPath, "*.dat"))
 			{
 				root = new XmlRootAttribute("datafile") { IsNullable = true };
 				serializer = new XmlSerializer(typeof(DatFile), root);
-				using (FileStream stream = new FileStream(Path.Combine(datDirectoryPath, file), FileMode.Open))
+				using (FileStream stream = new FileStream(Path.Combine(EmuStandInfo.datDirectoryPath, file), FileMode.Open))
 				{
 					datFiles.Add(Path.GetFileName(file), (DatFile)serializer.Deserialize(stream));
 				}
 			}
 
 			/* Read cartridge metadata database */
-			cartMetadataDatabase = metadataDatabaseFilePath.DeserializeFromFile<List<CartridgeJSON>>();
+			cartMetadataDatabase = EmuStandInfo.metadataDatabaseFilePath.DeserializeFromFile<List<CartridgeJSON>>();
 
             EssgeeLogger.EnqueueMessageSuccess($"Metadata initialized; {NumKnownGames} game(s) known across {NumKnownSystems} system(s).");
 		}

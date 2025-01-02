@@ -45,7 +45,7 @@ namespace Essgee.Emulation.Audio
 
 			public virtual void Reset()
 			{
-				for (var i = 0; i < sampleBuffer.Length; i++) sampleBuffer[i] = (byte)StandInfo.Random.Next(255);
+				for (var i = 0; i < sampleBuffer.Length; i++) sampleBuffer[i] = (byte)EmuStandInfo.Random.Next(255);
 				frequencyCounter = positionCounter = 0;
 				volume = 15;
 

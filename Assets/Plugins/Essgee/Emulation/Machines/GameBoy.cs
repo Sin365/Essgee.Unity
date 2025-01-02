@@ -187,7 +187,7 @@ namespace Essgee.Emulation.Machines
 			video?.SetRevision(0);
 
 			/* Audio */
-			audio?.SetSampleRate(StandInfo.Configuration.SampleRate);
+			audio?.SetSampleRate(EmuStandInfo.Configuration.SampleRate);
 			audio?.SetOutputChannels(2);
 			audio?.SetClockRate(masterClock);
 			audio?.SetRefreshRate(refreshRate);
