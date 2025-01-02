@@ -218,19 +218,20 @@ namespace Essgee.Emulation.Machines
 			psg?.Shutdown();
 		}
 
-		public void SetState(Dictionary<string, dynamic> state)
-		{
-			SaveStateHandler.PerformSetState(cartridge, state[nameof(cartridge)]);
-			wram = state[nameof(wram)];
-			SaveStateHandler.PerformSetState(cpu, state[nameof(cpu)]);
-			SaveStateHandler.PerformSetState(vdp, state[nameof(vdp)]);
-			SaveStateHandler.PerformSetState(psg, state[nameof(psg)]);
+        //public void SetState(Dictionary<string, dynamic> state)
+        public void SetState(Dictionary<string, object> state)
+        {
+			SaveStateHandler.PerformSetState(cartridge, (Dictionary<string, object>)state[nameof(cartridge)]);
+			wram = (byte[])state[nameof(wram)];
+			SaveStateHandler.PerformSetState(cpu, (Dictionary<string, object>)state[nameof(cpu)]);
+			SaveStateHandler.PerformSetState(vdp, (Dictionary<string, object>)state[nameof(vdp)]);
+			SaveStateHandler.PerformSetState(psg, (Dictionary<string, object>)state[nameof(psg)]);
 
-			portControls1 = state[nameof(portControls1)];
-			portControls2 = state[nameof(portControls2)];
-			controlsReadMode = state[nameof(controlsReadMode)];
-			isNmi = state[nameof(isNmi)];
-			isNmiPending = state[nameof(isNmiPending)];
+			portControls1 = (ushort)state[nameof(portControls1)];
+			portControls2 = (ushort)state[nameof(portControls2)];
+			controlsReadMode = (byte)state[nameof(controlsReadMode)];
+			isNmi = (bool)state[nameof(isNmi)];
+			isNmiPending = (bool)state[nameof(isNmiPending)];
 
 			ReconfigureSystem();
 		}

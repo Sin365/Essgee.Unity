@@ -102,8 +102,10 @@ namespace Essgee.Emulation
 			return machineId.Substring(0, Math.Min(machineId.Length, 16)).PadRight(16);
 		}
 
-		public static void PerformSetState(object obj, Dictionary<string, dynamic> state)
-		{
+        //public static void PerformSetState(object obj, Dictionary<string, dynamic> state)
+
+        public static void PerformSetState(object obj, Dictionary<string, object> state)
+        {
 			if (obj != null)
 			{
 				/* Restore property values from state */
@@ -120,11 +122,13 @@ namespace Essgee.Emulation
 			}
 		}
 
-		public static Dictionary<string, dynamic> PerformGetState(object obj)
-		{
-			var state = new Dictionary<string, dynamic>();
+        //public static Dictionary<string, dynamic> PerformGetState(object obj)
+        public static Dictionary<string, object> PerformGetState(object obj)
+        {
+            //var state = new Dictionary<string, dynamic>();
+            var state = new Dictionary<string, object>();
 
-			if (obj != null)
+            if (obj != null)
 			{
 				/* Copy property values to state */
 				foreach (var prop in obj.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).Where(x => x.GetCustomAttributes(typeof(StateRequiredAttribute), false).Length != 0))

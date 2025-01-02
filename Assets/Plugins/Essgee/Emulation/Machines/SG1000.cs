@@ -221,15 +221,16 @@ namespace Essgee.Emulation.Machines
 			psg?.Shutdown();
 		}
 
-		public void SetState(Dictionary<string, dynamic> state)
-		{
-			configuration.TVStandard = state[nameof(configuration.TVStandard)];
+        //public void SetState(Dictionary<string, dynamic> state)
+        public void SetState(Dictionary<string, object> state)
+        {
+			configuration.TVStandard = (TVStandard)state[nameof(configuration.TVStandard)];
 
-			SaveStateHandler.PerformSetState(cartridge, state[nameof(cartridge)]);
-			wram = state[nameof(wram)];
-			SaveStateHandler.PerformSetState(cpu, state[nameof(cpu)]);
-			SaveStateHandler.PerformSetState(vdp, state[nameof(vdp)]);
-			SaveStateHandler.PerformSetState(psg, state[nameof(psg)]);
+			SaveStateHandler.PerformSetState(cartridge, (Dictionary<string, object>)state[nameof(cartridge)]);
+			wram = (byte[])state[nameof(wram)];
+			SaveStateHandler.PerformSetState(cpu, (Dictionary<string, object>)state[nameof(cpu)]);
+			SaveStateHandler.PerformSetState(vdp, (Dictionary<string, object>)state[nameof(vdp)]);
+			SaveStateHandler.PerformSetState(psg, (Dictionary<string, object>)state[nameof(psg)]);
 
 			ReconfigureSystem();
 		}

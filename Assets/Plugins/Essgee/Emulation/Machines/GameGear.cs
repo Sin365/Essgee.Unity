@@ -242,29 +242,30 @@ namespace Essgee.Emulation.Machines
 			psg?.Shutdown();
 		}
 
-		public void SetState(Dictionary<string, dynamic> state)
-		{
-			configuration.Region = state[nameof(configuration.Region)];
+        //public void SetState(Dictionary<string, dynamic> state)
+        public void SetState(Dictionary<string, object> state)
+        {
+			configuration.Region = (Region)state[nameof(configuration.Region)];
 
-			SaveStateHandler.PerformSetState(bootstrap, state[nameof(bootstrap)]);
-			SaveStateHandler.PerformSetState(cartridge, state[nameof(cartridge)]);
-			wram = state[nameof(wram)];
-			SaveStateHandler.PerformSetState(cpu, state[nameof(cpu)]);
-			SaveStateHandler.PerformSetState(vdp, state[nameof(vdp)]);
-			SaveStateHandler.PerformSetState(psg, state[nameof(psg)]);
+			SaveStateHandler.PerformSetState(bootstrap, (Dictionary<string, object>)state[nameof(bootstrap)]);
+			SaveStateHandler.PerformSetState(cartridge, (Dictionary<string, object>)state[nameof(cartridge)]);
+			wram = (byte[])state[nameof(wram)];
+			SaveStateHandler.PerformSetState(cpu, (Dictionary<string, object>)state[nameof(cpu)]);
+			SaveStateHandler.PerformSetState(vdp, (Dictionary<string, object>)state[nameof(vdp)]);
+			SaveStateHandler.PerformSetState(psg, (Dictionary<string, object>)state[nameof(psg)]);
 
-			portMemoryControl = state[nameof(portMemoryControl)];
-			portIoControl = state[nameof(portIoControl)];
-			hCounterLatched = state[nameof(hCounterLatched)];
-			portIoAB = state[nameof(portIoAB)];
-			portIoBMisc = state[nameof(portIoBMisc)];
+			portMemoryControl = (byte)state[nameof(portMemoryControl)];
+			portIoControl = (byte)state[nameof(portIoControl)];
+			hCounterLatched = (byte)state[nameof(hCounterLatched)];
+			portIoAB = (byte)state[nameof(portIoAB)];
+			portIoBMisc = (byte)state[nameof(portIoBMisc)];
 
-			portIoC = state[nameof(portIoC)];
-			portParallelData = state[nameof(portParallelData)];
-			portDataDirNMI = state[nameof(portDataDirNMI)];
-			portTxBuffer = state[nameof(portTxBuffer)];
-			portRxBuffer = state[nameof(portRxBuffer)];
-			portSerialControl = state[nameof(portSerialControl)];
+			portIoC = (byte)state[nameof(portIoC)];
+			portParallelData = (byte)state[nameof(portParallelData)];
+			portDataDirNMI = (byte)state[nameof(portDataDirNMI)];
+			portTxBuffer = (byte)state[nameof(portTxBuffer)];
+			portRxBuffer = (byte)state[nameof(portRxBuffer)];
+			portSerialControl = (byte)state[nameof(portSerialControl)];
 
 			ReconfigureSystem();
 		}

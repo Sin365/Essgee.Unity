@@ -263,24 +263,25 @@ namespace Essgee.Emulation.Machines
 			psg?.Shutdown();
 		}
 
-		public void SetState(Dictionary<string, dynamic> state)
-		{
-			configuration.TVStandard = state[nameof(configuration.TVStandard)];
-			configuration.Region = state[nameof(configuration.Region)];
+        //public void SetState(Dictionary<string, dynamic> state)
+        public void SetState(Dictionary<string, object> state)
+        {
+			configuration.TVStandard = (TVStandard)state[nameof(configuration.TVStandard)];
+			configuration.Region = (Region)state[nameof(configuration.Region)];
 
-			SaveStateHandler.PerformSetState(bootstrap, state[nameof(bootstrap)]);
-			SaveStateHandler.PerformSetState(cartridge, state[nameof(cartridge)]);
-			wram = state[nameof(wram)];
-			SaveStateHandler.PerformSetState(cpu, state[nameof(cpu)]);
-			SaveStateHandler.PerformSetState(vdp, state[nameof(vdp)]);
-			SaveStateHandler.PerformSetState(psg, state[nameof(psg)]);
+			SaveStateHandler.PerformSetState(bootstrap, (Dictionary<string, object>)state[nameof(bootstrap)]);
+			SaveStateHandler.PerformSetState(cartridge, (Dictionary<string, object>)state[nameof(cartridge)]);
+			wram = (byte[])state[nameof(wram)];
+			SaveStateHandler.PerformSetState(cpu, (Dictionary<string, object>)state[nameof(cpu)]);
+			SaveStateHandler.PerformSetState(vdp, (Dictionary<string, object>)state[nameof(vdp)]);
+			SaveStateHandler.PerformSetState(psg, (Dictionary<string, object>)state[nameof(psg)]);
 
-			inputDevices = state[nameof(inputDevices)];
-			lightgunLatched = state[nameof(lightgunLatched)];
+			inputDevices = (InputDevice[])state[nameof(inputDevices)];
+			lightgunLatched = (bool)state[nameof(lightgunLatched)];
 
-			portMemoryControl = state[nameof(portMemoryControl)];
-			portIoControl = state[nameof(portIoControl)];
-			hCounterLatched = state[nameof(hCounterLatched)];
+			portMemoryControl = (byte)state[nameof(portMemoryControl)];
+			portIoControl = (byte)state[nameof(portIoControl)];
+			hCounterLatched = (byte)state[nameof(hCounterLatched)];
 
 			ReconfigureSystem();
 		}
