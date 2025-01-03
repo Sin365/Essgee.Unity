@@ -19,25 +19,25 @@ namespace Essgee.Emulation.Configuration
 
 		//todo Unity [DropDownControl("Controls", "D-Pad Up", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsUp { get; set; }
+		public MotionKey ControlsUp { get; set; }
 		//todo Unity [DropDownControl("Controls", "D-Pad Down", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsDown { get; set; }
+		public MotionKey ControlsDown { get; set; }
 		//todo Unity [DropDownControl("Controls", "D-Pad Left", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsLeft { get; set; }
+		public MotionKey ControlsLeft { get; set; }
 		//todo Unity [DropDownControl("Controls", "D-Pad Right", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsRight { get; set; }
+		public MotionKey ControlsRight { get; set; }
 		//todo Unity [DropDownControl("Controls", "Button 1", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsButton1 { get; set; }
+		public MotionKey ControlsButton1 { get; set; }
 		//todo Unity [DropDownControl("Controls", "Button 2", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsButton2 { get; set; }
+		public MotionKey ControlsButton2 { get; set; }
 		//todo Unity [DropDownControl("Controls", "Start", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsStart { get; set; }
+		public MotionKey ControlsStart { get; set; }
 
 		public bool AllowMemoryControl { get; set; }
 
@@ -47,13 +47,13 @@ namespace Essgee.Emulation.Configuration
 
 			Region = Region.Export;
 
-			ControlsUp = Keys.Up;
-			ControlsDown = Keys.Down;
-			ControlsLeft = Keys.Left;
-			ControlsRight = Keys.Right;
-			ControlsButton1 = Keys.A;
-			ControlsButton2 = Keys.S;
-			ControlsStart = Keys.Return;
+			ControlsUp = MotionKey.Up;
+			ControlsDown = MotionKey.Down;
+			ControlsLeft = MotionKey.Left;
+			ControlsRight = MotionKey.Right;
+			ControlsButton1 = MotionKey.A;
+			ControlsButton2 = MotionKey.S;
+			ControlsStart = MotionKey.Return;
 
 			AllowMemoryControl = true;
 		}

@@ -14,7 +14,7 @@ namespace Essgee.Emulation
 	{
 		readonly Action<Exception> exceptionHandler;
 
-		IMachine emulator;
+		public IMachine emulator { get; private set; }
 
 		Thread emulationThread;
 		volatile bool emulationThreadRunning;

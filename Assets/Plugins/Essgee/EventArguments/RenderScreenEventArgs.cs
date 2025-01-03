@@ -10,13 +10,16 @@ namespace Essgee.EventArguments
 	{
 		public int Width { get; private set; }
 		public int Height { get; private set; }
-		public byte[] FrameData { get; private set; }
+		//public byte[] FrameData { get; private set; }
+		public IntPtr FrameDataPtr { get; private set; }
 
-		public RenderScreenEventArgs(int width, int height, byte[] data)
+
+        public RenderScreenEventArgs(int width, int height, IntPtr ptr)
 		{
 			Width = width;
 			Height = height;
-			FrameData = data;
+			//FrameData = data;
+			FrameDataPtr = ptr;
 		}
 	}
 }

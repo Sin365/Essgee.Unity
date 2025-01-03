@@ -33,31 +33,31 @@ namespace Essgee.Emulation.Configuration
 
 		//todo Unity [DropDownControl("Controls", "Up", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsUp { get; set; }
+		public MotionKey ControlsUp { get; set; }
 		//todo Unity [DropDownControl("Controls", "Down", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsDown { get; set; }
+		public MotionKey ControlsDown { get; set; }
 		//todo Unity [DropDownControl("Controls", "Left", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsLeft { get; set; }
+		public MotionKey ControlsLeft { get; set; }
 		//todo Unity [DropDownControl("Controls", "Right", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsRight { get; set; }
+		public MotionKey ControlsRight { get; set; }
 		//todo Unity [DropDownControl("Controls", "A", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsA { get; set; }
+		public MotionKey ControlsA { get; set; }
 		//todo Unity [DropDownControl("Controls", "B", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsB { get; set; }
+		public MotionKey ControlsB { get; set; }
 		//todo Unity [DropDownControl("Controls", "Select", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsSelect { get; set; }
+		public MotionKey ControlsSelect { get; set; }
 		//todo Unity [DropDownControl("Controls", "Start", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsStart { get; set; }
+		public MotionKey ControlsStart { get; set; }
 		//todo Unity [DropDownControl("Controls", "Send IR Signal", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public Keys ControlsSendIR { get; set; }
+		public MotionKey ControlsSendIR { get; set; }
 
 		public GameBoyColor()
 		{
@@ -71,15 +71,15 @@ namespace Essgee.Emulation.Configuration
 			InfraredSource = Machines.GameBoyColor.InfraredSources.None;
 			InfraredDatabasePikachu = string.Empty;
 
-			ControlsUp = Keys.Up;
-			ControlsDown = Keys.Down;
-			ControlsLeft = Keys.Left;
-			ControlsRight = Keys.Right;
-			ControlsA = Keys.S;
-			ControlsB = Keys.A;
-			ControlsSelect = Keys.Space;
-			ControlsStart = Keys.Enter;
-			ControlsSendIR = Keys.Back;
+			ControlsUp = MotionKey.Up;
+			ControlsDown = MotionKey.Down;
+			ControlsLeft = MotionKey.Left;
+			ControlsRight = MotionKey.Right;
+			ControlsA = MotionKey.S;
+			ControlsB = MotionKey.A;
+			ControlsSelect = MotionKey.Space;
+			ControlsStart = MotionKey.Enter;
+			ControlsSendIR = MotionKey.Back;
 		}
 	}
 }

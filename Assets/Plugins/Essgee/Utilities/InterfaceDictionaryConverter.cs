@@ -22,7 +22,7 @@ namespace Essgee.Utilities
 			if (!objectType.IsGenericType || objectType.GetGenericTypeDefinition() != typeof(Dictionary<,>)) throw new InvalidOperationException("Can only deserialize dictionaries");
 
 			var dictionary = (System.Collections.IDictionary)Activator.CreateInstance(objectType);
-
+			//不再读取配置
 			var jObject = JObject.Load(reader);
 			foreach (var child in jObject.Children())
 			{

@@ -122,9 +122,9 @@ namespace Essgee.Emulation.Machines
 
 		int currentMasterClockCyclesInFrame, totalMasterClockCyclesInFrame;
 
-		Configuration.MasterSystem configuration;
+		public Configuration.MasterSystem configuration { get; private set; }
 
-		IEnumerable<Keys> lastKeysDown;
+		IEnumerable<MotionKey> lastKeysDown;
 		ControllerState lastControllerState;
 		MouseButtons lastMouseButtons;
 		(int x, int y) lastMousePosition;
@@ -145,7 +145,7 @@ namespace Essgee.Emulation.Machines
 			inputDevices[0] = InputDevice.None;
 			inputDevices[1] = InputDevice.None;
 
-			lastKeysDown = new List<Keys>();
+			lastKeysDown = new List<MotionKey>();
 			lastControllerState = new ControllerState();
 
 			vdp.EndOfScanline += (s, e) =>

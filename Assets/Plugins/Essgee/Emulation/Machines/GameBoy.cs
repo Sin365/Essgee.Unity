@@ -131,7 +131,7 @@ namespace Essgee.Emulation.Machines
 
 		int currentMasterClockCyclesInFrame, totalMasterClockCyclesInFrame;
 
-		Configuration.GameBoy configuration;
+		public Configuration.GameBoy configuration { get; private set; }
 
 		public GameBoy() { }
 
@@ -455,24 +455,40 @@ namespace Essgee.Emulation.Machines
 			inputsPressed = 0;
 
 			/* Keyboard */
-			if (eventArgs.Keyboard.Contains(configuration.ControlsRight) && !eventArgs.Keyboard.Contains(configuration.ControlsLeft)) inputsPressed |= JoypadInputs.Right;
-			if (eventArgs.Keyboard.Contains(configuration.ControlsLeft) && !eventArgs.Keyboard.Contains(configuration.ControlsRight)) inputsPressed |= JoypadInputs.Left;
-			if (eventArgs.Keyboard.Contains(configuration.ControlsUp) && !eventArgs.Keyboard.Contains(configuration.ControlsDown)) inputsPressed |= JoypadInputs.Up;
-			if (eventArgs.Keyboard.Contains(configuration.ControlsDown) && !eventArgs.Keyboard.Contains(configuration.ControlsUp)) inputsPressed |= JoypadInputs.Down;
-			if (eventArgs.Keyboard.Contains(configuration.ControlsA)) inputsPressed |= JoypadInputs.A;
-			if (eventArgs.Keyboard.Contains(configuration.ControlsB)) inputsPressed |= JoypadInputs.B;
-			if (eventArgs.Keyboard.Contains(configuration.ControlsSelect)) inputsPressed |= JoypadInputs.Select;
-			if (eventArgs.Keyboard.Contains(configuration.ControlsStart)) inputsPressed |= JoypadInputs.Start;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsRight) && !eventArgs.Keyboard.Contains(configuration.ControlsLeft)) 
+				inputsPressed |= JoypadInputs.Right;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsLeft) && !eventArgs.Keyboard.Contains(configuration.ControlsRight)) 
+				inputsPressed |= JoypadInputs.Left;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsUp) && !eventArgs.Keyboard.Contains(configuration.ControlsDown)) 
+				inputsPressed |= JoypadInputs.Up;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsDown) && !eventArgs.Keyboard.Contains(configuration.ControlsUp)) 
+				inputsPressed |= JoypadInputs.Down;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsA)) 
+				inputsPressed |= JoypadInputs.A;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsB)) 
+				inputsPressed |= JoypadInputs.B;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsSelect)) 
+				inputsPressed |= JoypadInputs.Select;
+			if (eventArgs.Keyboard.Contains(configuration.ControlsStart)) 
+				inputsPressed |= JoypadInputs.Start;
 
 			/* XInput controller */
-			if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) inputsPressed |= JoypadInputs.Right;
-			if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) inputsPressed |= JoypadInputs.Left;
-			if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) inputsPressed |= JoypadInputs.Up;
-			if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) inputsPressed |= JoypadInputs.Down;
-			if (eventArgs.ControllerState.IsAPressed()) inputsPressed |= JoypadInputs.A;
-			if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) inputsPressed |= JoypadInputs.B;
-			if (eventArgs.ControllerState.IsBackPressed()) inputsPressed |= JoypadInputs.Select;
-			if (eventArgs.ControllerState.IsStartPressed()) inputsPressed |= JoypadInputs.Start;
+			if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) 
+				inputsPressed |= JoypadInputs.Right;
+			if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) 
+				inputsPressed |= JoypadInputs.Left;
+			if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) 
+				inputsPressed |= JoypadInputs.Up;
+			if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) 
+				inputsPressed |= JoypadInputs.Down;
+			if (eventArgs.ControllerState.IsAPressed()) 
+				inputsPressed |= JoypadInputs.A;
+			if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) 
+				inputsPressed |= JoypadInputs.B;
+			if (eventArgs.ControllerState.IsBackPressed()) 
+				inputsPressed |= JoypadInputs.Select;
+			if (eventArgs.ControllerState.IsStartPressed()) 
+				inputsPressed |= JoypadInputs.Start;
 		}
 
 		private byte ReadMemory(ushort address)

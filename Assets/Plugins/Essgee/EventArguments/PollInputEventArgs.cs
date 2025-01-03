@@ -6,7 +6,7 @@ namespace Essgee.EventArguments
 {
     public class PollInputEventArgs : EventArgs
 	{
-		public IEnumerable<Keys> Keyboard { get; set; }
+		public IEnumerable<MotionKey> Keyboard { get; set; }
 
 		public MouseButtons MouseButtons { get; set; }
 		public (int X, int Y) MousePosition { get; set; }
@@ -15,7 +15,7 @@ namespace Essgee.EventArguments
 
 		public PollInputEventArgs()
 		{
-			Keyboard = new List<Keys>();
+			Keyboard = new List<MotionKey>();
 
 			MouseButtons = MouseButtons.None;
 			MousePosition = (0, 0);

@@ -10,6 +10,7 @@ using Essgee.EventArguments;
 using Essgee.Utilities;
 
 using static Essgee.Emulation.CPU.SM83;
+using System.Runtime.InteropServices;
 
 namespace Essgee.Emulation.Video.Nintendo
 {
@@ -408,9 +409,16 @@ namespace Essgee.Emulation.Video.Nintendo
 
 				if (skipFrames > 0) skipFrames--;
 
-				/* Submit screen for rendering */
-				OnRenderScreen(new RenderScreenEventArgs(displayActiveWidth, displayActiveHeight, outputFramebuffer.Clone() as byte[]));
-			}
+                /* Submit screen for rendering */
+
+
+                // 固定数组，防止垃圾回收器移动它  
+                var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
+                // 获取数组的指针  
+                IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
+                OnRenderScreen(new RenderScreenEventArgs(displayActiveWidth, displayActiveHeight, mFrameDataPtr));
+                //OnRenderScreen(new RenderScreenEventArgs(displayActiveWidth, displayActiveHeight, outputFramebuffer.Clone() as byte[]));
+            }
 			else
 			{
 				modeNumber = 2;

@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 [Flags]
 [ComVisible(true)]
-public enum Keys
+public enum MotionKey
 {
     KeyCode = 0xFFFF,
     Modifiers = -65536,

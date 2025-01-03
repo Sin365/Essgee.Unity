@@ -16,7 +16,9 @@ using UnityEngine;
 
 public class Essgeeinit : MonoBehaviour
 {
+    static Essgeeinit instance;
     public static System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+    public static bool bInGame => instance?.emulatorHandler?.IsRunning == true ? true : false;
     #region
     UEGVideoPlayer graphicsHandler;
     UEGSoundPlayer soundHandler;
@@ -29,13 +31,15 @@ public class Essgeeinit : MonoBehaviour
     double currentPixelAspectRatio;
     byte[] lastFramebufferData;
     (int width, int height) lastFramebufferSize;
+    private UniKeyboard mUniKeyboard;
 
-    private List<Keys> keysDown;
     #endregion
 
     void Awake()
     {
+        instance = this;
         InitAll(Application.streamingAssetsPath, Application.persistentDataPath);
+        //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
         LoadAndRunCartridge("G:/SML2.gb");
     }
 
@@ -43,6 +47,13 @@ public class Essgeeinit : MonoBehaviour
     {
         SaveConfiguration();
         Dispose(false);
+    }
+
+    private void Update()
+    {
+        if (!emulatorHandler.IsRunning)
+            return;
+        mUniKeyboard.UpdateInputKey();
     }
 
     void InitAll(string BaseDataDir, string CustonDataDir)
@@ -103,7 +114,7 @@ public class Essgeeinit : MonoBehaviour
 
     void InitEmu()
     {
-        keysDown = new List<Keys>();
+        //keysDown = new List<MotionKey>();
     }
 
     #region 细节初始化
@@ -114,6 +125,8 @@ public class Essgeeinit : MonoBehaviour
         InitializeGraphicsHandler();
         InitializeSoundHandler();
         InitializeMetadataHandler();
+
+        mUniKeyboard = this.gameObject.AddComponent<UniKeyboard>();
     }
 
     private void InitializeOSDHandler()
@@ -136,7 +149,7 @@ public class Essgeeinit : MonoBehaviour
 
     private void InitializeSoundHandler()
     {
-        soundHandler = this.gameObject.AddComponent<UEGSoundPlayer>();
+        soundHandler = this.gameObject.GetComponent<UEGSoundPlayer>();
         //soundHandler = new SoundHandler(onScreenDisplayHandler, Program.Configuration.SampleRate, 2, ExceptionHandler);
         //soundHandler.SetVolume(Program.Configuration.Volume);
         //soundHandler.SetMute(Program.Configuration.Mute);
@@ -176,6 +189,7 @@ public class Essgeeinit : MonoBehaviour
         }
         List<Type> machineType = new List<Type>();
         machineType.Add(typeof(GameBoy));
+        machineType.Add(typeof(MasterSystem));
 
         //foreach (var machineConfigType in Assembly.GetExecutingAssembly().GetTypes().Where(x => typeof(IConfiguration).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract))
         foreach (var machineConfigType in machineType)
@@ -344,7 +358,15 @@ public class Essgeeinit : MonoBehaviour
             //startRecordingToolStripMenuItem.Enabled = true;
             //toggleLayersToolStripMenuItem.Enabled = enableChannelsToolStripMenuItem.Enabled = true;
 
+
+            //初始化不同平台的按钮
+            mUniKeyboard.Init(emulatorHandler.emulator);
+
             emulatorHandler.Startup();
+
+
+            //初始化音频
+            soundHandler.Initialize();
 
             //SizeAndPositionWindow();
             //SetWindowTitleAndStatus();
@@ -544,7 +566,8 @@ public class Essgeeinit : MonoBehaviour
         //lastFramebufferData = e.FrameData;
         //graphicsHandler?.SetTextureData(e.FrameData);
 
-        graphicsHandler.SubmitVideo(e.Width, e.Height, e.FrameData, 0);
+        //graphicsHandler.SubmitVideo(e.Width, e.Height, e.FrameData, 0);
+        graphicsHandler.SubmitVideo(e.Width, e.Height, e.FrameDataPtr, 0);
 
         // TODO: create emulation "EndOfFrame" event for this?
         ControllerManager.Update();
@@ -577,10 +600,14 @@ public class Essgeeinit : MonoBehaviour
     {
         //TODO Input实现
 
-        //// TODO: rare, random, weird argument exceptions on e.Keyboard assignment; does this lock help??
+        e.Keyboard = mUniKeyboard.mKeyCodeCore.GetPressedKeys();
+        e.MouseButtons = default;
+        e.MousePosition = default;
+
+        // TODO: rare, random, weird argument exceptions on e.Keyboard assignment; does this lock help??
         //lock (uiLock)
         //{
-        //    e.Keyboard = new List<Keys>(keysDown);
+        //    e.Keyboard = new List<MotionKey>(keysDown);
         //    e.MouseButtons = mouseButtonsDown;
 
         //    var vx = (currentViewport.x - 50);
@@ -655,7 +682,6 @@ public class Essgeeinit : MonoBehaviour
 
     public void EnqueueSoundSamples(object sender, EnqueueSamplesEventArgs e)
     {
-        return;
         //if (sampleQueue.Count > MaxQueueLength)
         //{
         //    var samplesToDrop = (sampleQueue.Count - MaxQueueLength);
@@ -674,7 +700,7 @@ public class Essgeeinit : MonoBehaviour
         //}
 
         //TODO 音频处理
-        soundHandler.SubmitSamples(e.MixedSamples, e.MixedSamples.Length);
+        soundHandler.SubmitSamples(e.MixedSamples, e.ChannelSamples, e.MixedSamples.Length);
     }
     #endregion
 }

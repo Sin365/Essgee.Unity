@@ -17,7 +17,7 @@ public class UEGVideoPlayer : MonoBehaviour
     private RawImage m_drawCanvas;
     [SerializeField]
     private RectTransform m_drawCanvasrect;
-    byte[] mFrameData;
+    //byte[] mFrameData;
     IntPtr mFrameDataPtr;
 
     private TimeSpan lastElapsed;
@@ -40,17 +40,17 @@ public class UEGVideoPlayer : MonoBehaviour
         if (m_rawBufferWarper == null)
         {
             mDataLenght = mWidth * mHeight * 4;
-            mFrameData = new byte[mDataLenght];
+            //mFrameData = new byte[mDataLenght];
 
-            // 固定数组，防止垃圾回收器移动它  
-            var bitmapcolorRect_handle = GCHandle.Alloc(mFrameData, GCHandleType.Pinned);
-            // 获取数组的指针  
-            mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
+            //// 固定数组，防止垃圾回收器移动它  
+            //var bitmapcolorRect_handle = GCHandle.Alloc(mFrameData, GCHandleType.Pinned);
+            //// 获取数组的指针  
+            //mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
 
 
             //MAME来的是BGRA32，好好好
-            //m_rawBufferWarper = new Texture2D(mWidth, mHeight, TextureFormat.BGRA32, false);
-            m_rawBufferWarper = new Texture2D(mWidth, mHeight, TextureFormat.ARGB32, false);
+            m_rawBufferWarper = new Texture2D(mWidth, mHeight, TextureFormat.BGRA32, false);
+            //m_rawBufferWarper = new Texture2D(mWidth, mHeight, TextureFormat.ARGB32, false);
             m_rawBufferWarper.filterMode = FilterMode.Point;
         }
 
@@ -82,7 +82,8 @@ public class UEGVideoPlayer : MonoBehaviour
         m_rawBufferWarper.Apply();
     }
 
-    public void SubmitVideo(int width, int height, byte[] data, long frame_number)
+    //public void SubmitVideo(int width, int height, byte[] data, long frame_number)
+    public void SubmitVideo(int width, int height, IntPtr ptr, long frame_number)
     {
 
         mFrame = (ulong)frame_number;
@@ -90,7 +91,8 @@ public class UEGVideoPlayer : MonoBehaviour
         var delta = current - lastElapsed;
         lastElapsed = current;
         videoFPS = 1d / delta.TotalSeconds;
-        mFrameData = data;
+        //mFrameData = data;
+        mFrameDataPtr = ptr;
 
         if (!bHadData)
         {

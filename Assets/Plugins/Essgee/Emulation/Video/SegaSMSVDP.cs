@@ -9,6 +9,7 @@ using Essgee.EventArguments;
 using Essgee.Utilities;
 
 using static Essgee.Emulation.Utilities;
+using System.Runtime.InteropServices;
 
 namespace Essgee.Emulation.Video
 {
@@ -446,7 +447,14 @@ namespace Essgee.Emulation.Video
 
 		protected override void PrepareRenderScreen()
 		{
-			OnRenderScreen(new RenderScreenEventArgs(numVisiblePixels, numVisibleScanlines, outputFramebuffer.Clone() as byte[]));
+
+
+            // 固定数组，防止垃圾回收器移动它  
+            var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
+            // 获取数组的指针  
+            IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
+            OnRenderScreen(new RenderScreenEventArgs(numVisiblePixels, numVisibleScanlines, mFrameDataPtr));
+            //OnRenderScreen(new RenderScreenEventArgs(numVisiblePixels, numVisibleScanlines, outputFramebuffer.Clone() as byte[]));
 		}
 
 		protected override byte ReadVram(ushort address)
