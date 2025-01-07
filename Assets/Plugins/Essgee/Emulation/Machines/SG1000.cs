@@ -116,7 +116,7 @@ namespace Essgee.Emulation.Machines
 
 		int currentMasterClockCyclesInFrame, totalMasterClockCyclesInFrame;
 
-		Configuration.SG1000 configuration;
+		public Configuration.SG1000 configuration;
 
 		public SG1000() { }
 

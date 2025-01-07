@@ -128,7 +128,7 @@ namespace Essgee.Emulation.Machines
 
 		int currentMasterClockCyclesInFrame, totalMasterClockCyclesInFrame;
 
-		Configuration.SC3000 configuration;
+		public Configuration.SC3000 configuration;
 
 		public SC3000() { }
 

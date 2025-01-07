@@ -39,8 +39,8 @@ public class Essgeeinit : MonoBehaviour
     {
         instance = this;
         InitAll(Application.streamingAssetsPath, Application.persistentDataPath);
-        //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
-        LoadAndRunCartridge("G:/SML2.gb");
+        LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
+        //LoadAndRunCartridge("G:/SML2.gb");
     }
 
     void OnDisable()
@@ -189,7 +189,12 @@ public class Essgeeinit : MonoBehaviour
         }
         List<Type> machineType = new List<Type>();
         machineType.Add(typeof(GameBoy));
+        machineType.Add(typeof(GameBoyColor));
+        machineType.Add(typeof(ColecoVision));
+        machineType.Add(typeof(GameGear));
         machineType.Add(typeof(MasterSystem));
+        machineType.Add(typeof(SC3000));
+        machineType.Add(typeof(SG1000));
 
         //foreach (var machineConfigType in Assembly.GetExecutingAssembly().GetTypes().Where(x => typeof(IConfiguration).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract))
         foreach (var machineConfigType in machineType)

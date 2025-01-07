@@ -122,7 +122,7 @@ namespace Essgee.Emulation.Machines
 
 		int currentMasterClockCyclesInFrame, totalMasterClockCyclesInFrame;
 
-		Configuration.GameGear configuration;
+		public Configuration.GameGear configuration;
 
 		public GameGear() { }
 

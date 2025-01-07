@@ -92,7 +92,6 @@ public class KeyCodeCore
         //}
         dictKeyCfgs.Clear();
         //dictKeyCfgs.Add(KeyCode.P, MotionKey.EMU_PAUSED);
-
         if (Machine is Essgee.Emulation.Machines.MasterSystem)
         {
             var machine = (Essgee.Emulation.Machines.MasterSystem)Machine;
@@ -124,7 +123,112 @@ public class KeyCodeCore
             dictKeyCfgs.Add(KeyCode.Return, machine.configuration.ControlsStart);
             dictKeyCfgs.Add(KeyCode.RightShift, machine.configuration.ControlsSelect);
         }
+        else if (Machine is Essgee.Emulation.Machines.GameBoyColor)
+        {
+            var machine = (Essgee.Emulation.Machines.GameBoyColor)Machine;
 
+            dictKeyCfgs.Add(KeyCode.W, machine.configuration.ControlsUp);
+            dictKeyCfgs.Add(KeyCode.S, machine.configuration.ControlsDown);
+            dictKeyCfgs.Add(KeyCode.A, machine.configuration.ControlsLeft);
+            dictKeyCfgs.Add(KeyCode.D, machine.configuration.ControlsRight);
+            dictKeyCfgs.Add(KeyCode.J, machine.configuration.ControlsB);
+            dictKeyCfgs.Add(KeyCode.K, machine.configuration.ControlsA);
+
+            dictKeyCfgs.Add(KeyCode.Return, machine.configuration.ControlsStart);
+            dictKeyCfgs.Add(KeyCode.RightShift, machine.configuration.ControlsSelect);
+            dictKeyCfgs.Add(KeyCode.Space, machine.configuration.ControlsSendIR);
+        }
+        else if (Machine is Essgee.Emulation.Machines.GameGear)
+        {
+            var machine = (Essgee.Emulation.Machines.GameGear)Machine;
+            dictKeyCfgs.Add(KeyCode.W, machine.configuration.ControlsUp);
+            dictKeyCfgs.Add(KeyCode.S, machine.configuration.ControlsDown);
+            dictKeyCfgs.Add(KeyCode.A, machine.configuration.ControlsLeft);
+            dictKeyCfgs.Add(KeyCode.D, machine.configuration.ControlsRight);
+            dictKeyCfgs.Add(KeyCode.J, machine.configuration.ControlsButton2);
+            dictKeyCfgs.Add(KeyCode.K, machine.configuration.ControlsButton1);
+            dictKeyCfgs.Add(KeyCode.Return, machine.configuration.ControlsStart);
+        }
+        else if (Machine is Essgee.Emulation.Machines.SC3000)
+        {
+            var machine = (Essgee.Emulation.Machines.SC3000)Machine;
+
+            /*
+             * InputReset = MotionKey.F12;
+			InputChangeMode = MotionKey.F1;
+			InputPlayTape = MotionKey.F2;
+
+			Joypad1Up = MotionKey.Up;
+			Joypad1Down = MotionKey.Down;
+			Joypad1Left = MotionKey.Left;
+			Joypad1Right = MotionKey.Right;
+			Joypad1Button1 = MotionKey.A;
+			Joypad1Button2 = MotionKey.S;
+
+			Joypad2Up = MotionKey.NumPad8;
+			Joypad2Down = MotionKey.NumPad2;
+			Joypad2Left = MotionKey.NumPad4;
+			Joypad2Right = MotionKey.NumPad6;
+			Joypad2Button1 = MotionKey.NumPad1;
+			Joypad2Button2 = MotionKey.NumPad3;
+             */
+
+            dictKeyCfgs.Add(KeyCode.F12, machine.configuration.InputReset);
+            dictKeyCfgs.Add(KeyCode.F1, machine.configuration.InputChangeMode);
+            dictKeyCfgs.Add(KeyCode.F2, machine.configuration.InputPlayTape);
+
+            dictKeyCfgs.Add(KeyCode.W, machine.configuration.Joypad1Up);
+            dictKeyCfgs.Add(KeyCode.S, machine.configuration.Joypad1Down);
+            dictKeyCfgs.Add(KeyCode.A, machine.configuration.Joypad1Left);
+            dictKeyCfgs.Add(KeyCode.D, machine.configuration.Joypad1Right);
+            dictKeyCfgs.Add(KeyCode.J, machine.configuration.Joypad1Button2);
+            dictKeyCfgs.Add(KeyCode.K, machine.configuration.Joypad1Button1);
+
+            dictKeyCfgs.Add(KeyCode.UpArrow, machine.configuration.Joypad2Up);
+            dictKeyCfgs.Add(KeyCode.DownArrow, machine.configuration.Joypad2Down);
+            dictKeyCfgs.Add(KeyCode.LeftArrow, machine.configuration.Joypad2Left);
+            dictKeyCfgs.Add(KeyCode.RightAlt, machine.configuration.Joypad2Right);
+            dictKeyCfgs.Add(KeyCode.Alpha1, machine.configuration.Joypad2Button1);
+            dictKeyCfgs.Add(KeyCode.Alpha2, machine.configuration.Joypad2Button2);
+        }
+        else if (Machine is Essgee.Emulation.Machines.SG1000)
+        {
+            var machine = (Essgee.Emulation.Machines.SG1000)Machine;
+
+            /*
+             TVStandard = TVStandard.NTSC;
+
+			InputPause = MotionKey.Space;
+
+			Joypad1Up = MotionKey.Up;
+			Joypad1Down = MotionKey.Down;
+			Joypad1Left = MotionKey.Left;
+			Joypad1Right = MotionKey.Right;
+			Joypad1Button1 = MotionKey.A;
+			Joypad1Button2 = MotionKey.S;
+
+			Joypad2Up = MotionKey.NumPad8;
+			Joypad2Down = MotionKey.NumPad2;
+			Joypad2Left = MotionKey.NumPad4;
+			Joypad2Right = MotionKey.NumPad6;
+			Joypad2Button1 = MotionKey.NumPad1;
+			Joypad2Button2 = MotionKey.NumPad3;
+             */
+
+            dictKeyCfgs.Add(KeyCode.W, machine.configuration.Joypad1Up);
+            dictKeyCfgs.Add(KeyCode.S, machine.configuration.Joypad1Down);
+            dictKeyCfgs.Add(KeyCode.A, machine.configuration.Joypad1Left);
+            dictKeyCfgs.Add(KeyCode.D, machine.configuration.Joypad1Right);
+            dictKeyCfgs.Add(KeyCode.J, machine.configuration.Joypad1Button2);
+            dictKeyCfgs.Add(KeyCode.K, machine.configuration.Joypad1Button1);
+
+            dictKeyCfgs.Add(KeyCode.UpArrow, machine.configuration.Joypad2Up);
+            dictKeyCfgs.Add(KeyCode.DownArrow, machine.configuration.Joypad2Down);
+            dictKeyCfgs.Add(KeyCode.LeftArrow, machine.configuration.Joypad2Left);
+            dictKeyCfgs.Add(KeyCode.RightAlt, machine.configuration.Joypad2Right);
+            dictKeyCfgs.Add(KeyCode.Alpha1, machine.configuration.Joypad2Button1);
+            dictKeyCfgs.Add(KeyCode.Alpha2, machine.configuration.Joypad2Button2);
+        }
         CheckList = dictKeyCfgs.Keys.ToArray();
 
 

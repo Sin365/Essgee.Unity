@@ -161,7 +161,7 @@ namespace Essgee.Emulation.Machines
 
 		int currentMasterClockCyclesInFrame, totalMasterClockCyclesInFrame;
 
-		Configuration.GameBoyColor configuration;
+		public Configuration.GameBoyColor configuration;
 
 		public GameBoyColor() { }
 
