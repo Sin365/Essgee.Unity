@@ -39,8 +39,8 @@ public class Essgeeinit : MonoBehaviour
     {
         instance = this;
         InitAll(Application.streamingAssetsPath, Application.persistentDataPath);
-        LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
-        //LoadAndRunCartridge("G:/SML2.gb");
+        //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
+        LoadAndRunCartridge("G:/SML2.gb");
     }
 
     void OnDisable()
@@ -605,7 +605,8 @@ public class Essgeeinit : MonoBehaviour
     {
         //TODO Input µœ÷
 
-        e.Keyboard = mUniKeyboard.mKeyCodeCore.GetPressedKeys();
+        //e.Keyboard = mUniKeyboard.mKeyCodeCore.GetPressedKeys();
+        e.Keyboard.AddRange(mUniKeyboard.mKeyCodeCore.GetPressedKeys());
         e.MouseButtons = default;
         e.MousePosition = default;
 

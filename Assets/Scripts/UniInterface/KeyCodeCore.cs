@@ -1,6 +1,4 @@
-﻿using Essgee.Emulation.Configuration;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -173,7 +171,7 @@ public class KeyCodeCore
 			Joypad2Button2 = MotionKey.NumPad3;
              */
 
-            dictKeyCfgs.Add(KeyCode.F12, machine.configuration.InputReset);
+            //dictKeyCfgs.Add(KeyCode.F12, machine.configuration.InputReset);
             dictKeyCfgs.Add(KeyCode.F1, machine.configuration.InputChangeMode);
             dictKeyCfgs.Add(KeyCode.F2, machine.configuration.InputPlayTape);
 
@@ -226,8 +224,8 @@ public class KeyCodeCore
             dictKeyCfgs.Add(KeyCode.DownArrow, machine.configuration.Joypad2Down);
             dictKeyCfgs.Add(KeyCode.LeftArrow, machine.configuration.Joypad2Left);
             dictKeyCfgs.Add(KeyCode.RightAlt, machine.configuration.Joypad2Right);
-            dictKeyCfgs.Add(KeyCode.Alpha1, machine.configuration.Joypad2Button1);
-            dictKeyCfgs.Add(KeyCode.Alpha2, machine.configuration.Joypad2Button2);
+            dictKeyCfgs.Add(KeyCode.Alpha1, machine.configuration.Joypad2Button2);
+            dictKeyCfgs.Add(KeyCode.Alpha2, machine.configuration.Joypad2Button1);
         }
         CheckList = dictKeyCfgs.Keys.ToArray();
 

@@ -387,7 +387,9 @@ namespace Essgee.Emulation.Video.Nintendo
 			if (cycleCount == clockCyclesPerLine) EndHBlank();
 		}
 
-		protected virtual void EndHBlank()
+
+		GCHandle? lasyRenderHandle;
+        protected virtual void EndHBlank()
 		{
 			/* End of scanline reached */
 			OnEndOfScanline(EventArgs.Empty);
@@ -409,14 +411,19 @@ namespace Essgee.Emulation.Video.Nintendo
 
 				if (skipFrames > 0) skipFrames--;
 
-                /* Submit screen for rendering */
-
+				/* Submit screen for rendering */
 
                 // 固定数组，防止垃圾回收器移动它  
                 var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
                 // 获取数组的指针  
                 IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
-                OnRenderScreen(new RenderScreenEventArgs(displayActiveWidth, displayActiveHeight, mFrameDataPtr));
+                var eventArgs = RenderScreenEventArgs.Create(displayActiveWidth, displayActiveHeight, mFrameDataPtr);
+                OnRenderScreen(eventArgs);
+                eventArgs.Release(); 
+				if (lasyRenderHandle != null)
+                    lasyRenderHandle.Value.Free();
+                lasyRenderHandle = bitmapcolorRect_handle;
+
                 //OnRenderScreen(new RenderScreenEventArgs(displayActiveWidth, displayActiveHeight, outputFramebuffer.Clone() as byte[]));
             }
 			else

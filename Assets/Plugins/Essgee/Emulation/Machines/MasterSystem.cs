@@ -124,8 +124,8 @@ namespace Essgee.Emulation.Machines
 
 		public Configuration.MasterSystem configuration { get; private set; }
 
-		IEnumerable<MotionKey> lastKeysDown;
-		ControllerState lastControllerState;
+		List<MotionKey> lastKeysDown;
+		//ControllerState lastControllerState;
 		MouseButtons lastMouseButtons;
 		(int x, int y) lastMousePosition;
 
@@ -146,20 +146,23 @@ namespace Essgee.Emulation.Machines
 			inputDevices[1] = InputDevice.None;
 
 			lastKeysDown = new List<MotionKey>();
-			lastControllerState = new ControllerState();
+			//lastControllerState = new ControllerState();
 
 			vdp.EndOfScanline += (s, e) =>
 			{
-				PollInputEventArgs pollInputEventArgs = new PollInputEventArgs();
+				PollInputEventArgs pollInputEventArgs = PollInputEventArgs.Create();
 				OnPollInput(pollInputEventArgs);
 
-				lastKeysDown = pollInputEventArgs.Keyboard;
-				lastControllerState = pollInputEventArgs.ControllerState;
+				lastKeysDown.Clear();
+                lastKeysDown.AddRange(pollInputEventArgs.Keyboard);
+				//lastControllerState = pollInputEventArgs.ControllerState;
 				lastMouseButtons = pollInputEventArgs.MouseButtons;
 				lastMousePosition = pollInputEventArgs.MousePosition;
 
 				HandlePauseButton();
-			};
+				pollInputEventArgs.Release();
+
+            };
 		}
 
 		public void SetConfiguration(IConfiguration config)
@@ -215,9 +218,11 @@ namespace Essgee.Emulation.Machines
 			currentMasterClockCyclesInFrame = 0;
 			totalMasterClockCyclesInFrame = (int)Math.Round(masterClock / RefreshRate);
 
-			OnChangeViewport(new ChangeViewportEventArgs(vdp.Viewport));
+            var eventArgs = ChangeViewportEventArgs.Create(vdp.Viewport);
+            OnChangeViewport(eventArgs);
+            eventArgs.Release();
 
-			inputDevices[0] = configuration.Joypad1DeviceType;
+            inputDevices[0] = configuration.Joypad1DeviceType;
 			inputDevices[1] = configuration.Joypad2DeviceType;
 		}
 
@@ -376,7 +381,7 @@ namespace Essgee.Emulation.Machines
 
 		private void HandlePauseButton()
 		{
-			var pausePressed = lastKeysDown.Contains(configuration.InputPause) || lastControllerState.IsStartPressed();
+			var pausePressed = lastKeysDown.Contains(configuration.InputPause);// || lastControllerState.IsStartPressed();
 			var pauseButtonHeld = pauseButtonToggle && pausePressed;
 			if (pausePressed)
 			{
@@ -398,19 +403,32 @@ namespace Essgee.Emulation.Machines
 					break;
 
 				case InputDevice.Controller:
-					if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Up : configuration.Joypad2Up) || (port == 0 && lastControllerState.IsAnyUpDirectionPressed() && !lastControllerState.IsAnyDownDirectionPressed()))
-						state &= (byte)~ControllerInputs.Up;
-					if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Down : configuration.Joypad2Down) || (port == 0 && lastControllerState.IsAnyDownDirectionPressed() && !lastControllerState.IsAnyUpDirectionPressed()))
-						state &= (byte)~ControllerInputs.Down;
-					if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Left : configuration.Joypad2Left) || (port == 0 && lastControllerState.IsAnyLeftDirectionPressed() && !lastControllerState.IsAnyRightDirectionPressed()))
-						state &= (byte)~ControllerInputs.Left;
-					if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Right : configuration.Joypad2Right) || (port == 0 && lastControllerState.IsAnyRightDirectionPressed() && !lastControllerState.IsAnyLeftDirectionPressed()))
-						state &= (byte)~ControllerInputs.Right;
-					if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Button1 : configuration.Joypad2Button1) || (port == 0 && lastControllerState.IsAPressed()))
-						state &= (byte)~ControllerInputs.TL;
-					if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Button2 : configuration.Joypad2Button2) || (port == 0 && (lastControllerState.IsXPressed() || lastControllerState.IsBPressed())))
-						state &= (byte)~ControllerInputs.TR;
-					break;
+                    if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Up : configuration.Joypad2Up))
+                        state &= (byte)~ControllerInputs.Up;
+                    if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Down : configuration.Joypad2Down))
+                        state &= (byte)~ControllerInputs.Down;
+                    if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Left : configuration.Joypad2Left))
+                        state &= (byte)~ControllerInputs.Left;
+                    if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Right : configuration.Joypad2Right))
+                        state &= (byte)~ControllerInputs.Right;
+                    if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Button1 : configuration.Joypad2Button1))
+                        state &= (byte)~ControllerInputs.TL;
+                    if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Button2 : configuration.Joypad2Button2))
+                        state &= (byte)~ControllerInputs.TR;
+
+                    //if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Up : configuration.Joypad2Up) || (port == 0 && lastControllerState.IsAnyUpDirectionPressed() && !lastControllerState.IsAnyDownDirectionPressed()))
+                    //	state &= (byte)~ControllerInputs.Up;
+                    //if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Down : configuration.Joypad2Down) || (port == 0 && lastControllerState.IsAnyDownDirectionPressed() && !lastControllerState.IsAnyUpDirectionPressed()))
+                    //	state &= (byte)~ControllerInputs.Down;
+                    //if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Left : configuration.Joypad2Left) || (port == 0 && lastControllerState.IsAnyLeftDirectionPressed() && !lastControllerState.IsAnyRightDirectionPressed()))
+                    //	state &= (byte)~ControllerInputs.Left;
+                    //if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Right : configuration.Joypad2Right) || (port == 0 && lastControllerState.IsAnyRightDirectionPressed() && !lastControllerState.IsAnyLeftDirectionPressed()))
+                    //	state &= (byte)~ControllerInputs.Right;
+                    //if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Button1 : configuration.Joypad2Button1) || (port == 0 && lastControllerState.IsAPressed()))
+                    //	state &= (byte)~ControllerInputs.TL;
+                    //if (lastKeysDown.Contains(port == 0 ? configuration.Joypad1Button2 : configuration.Joypad2Button2) || (port == 0 && (lastControllerState.IsXPressed() || lastControllerState.IsBPressed())))
+                    //	state &= (byte)~ControllerInputs.TR;
+                    break;
 
 				case InputDevice.Lightgun:
 					if (GetIOControlDirection(port == 0 ? IOControlPort.A : IOControlPort.B, IOControlPin.TH, portIoControl) == IOControlDirection.Input)

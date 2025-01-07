@@ -267,15 +267,19 @@ namespace Essgee.Emulation.Audio
 			}
 
 			if (mixedSampleBuffer.Count >= (samplesPerFrame * numOutputChannels))
-			{
-				OnEnqueueSamples(new EnqueueSamplesEventArgs(
+            {
+				EnqueueSamplesEventArgs eventArgs = EnqueueSamplesEventArgs.Create(
 					numChannels,
 					channelSampleBuffer.Select(x => x.ToArray()).ToArray(),
 					new bool[] { !channel1ForceEnable, !channel2ForceEnable, !channel3ForceEnable, !channel4ForceEnable },
-					mixedSampleBuffer.ToArray()));
+					mixedSampleBuffer.ToArray());
+                OnEnqueueSamples(eventArgs);
 
 				FlushSamples();
-			}
+
+				eventArgs.Release();
+
+            }
 
 			if (frameCycleCount >= cyclesPerFrame)
 			{

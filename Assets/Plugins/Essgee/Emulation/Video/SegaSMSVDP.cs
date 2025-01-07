@@ -445,17 +445,23 @@ namespace Essgee.Emulation.Video
 			}
 		}
 
-		protected override void PrepareRenderScreen()
+        GCHandle? lasyRenderHandle;
+        protected override void PrepareRenderScreen()
 		{
-
-
             // 固定数组，防止垃圾回收器移动它  
             var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
             // 获取数组的指针  
             IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
-            OnRenderScreen(new RenderScreenEventArgs(numVisiblePixels, numVisibleScanlines, mFrameDataPtr));
+
+            var eventArgs = RenderScreenEventArgs.Create(numVisiblePixels, numVisibleScanlines, mFrameDataPtr);
+            OnRenderScreen(eventArgs);
+            eventArgs.Release();
+            if (lasyRenderHandle != null)
+                lasyRenderHandle.Value.Free();
+            lasyRenderHandle = bitmapcolorRect_handle;
+
             //OnRenderScreen(new RenderScreenEventArgs(numVisiblePixels, numVisibleScanlines, outputFramebuffer.Clone() as byte[]));
-		}
+        }
 
 		protected override byte ReadVram(ushort address)
 		{

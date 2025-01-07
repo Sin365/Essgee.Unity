@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Essgee.Utilities.XInput
 {
-	public class Controller
+    public class Controller
 	{
 		XInputState inputStatesCurrent, inputStatesPrev;
 		bool timedVibrationEnabled;
@@ -64,17 +60,17 @@ namespace Essgee.Utilities.XInput
 				throw new Exception(string.Format("Error code {0}", (int)result));
 		}
 
-		public ControllerState GetControllerState()
-		{
-			return new ControllerState
-			{
-				Buttons = inputStatesCurrent.Gamepad.Buttons,
-				LeftThumbstick = new ThumbstickPosition(inputStatesCurrent.Gamepad.sThumbLX / 32768.0f, inputStatesCurrent.Gamepad.sThumbLY / 32768.0f),
-				RightThumbstick = new ThumbstickPosition(inputStatesCurrent.Gamepad.sThumbRX / 32768.0f, inputStatesCurrent.Gamepad.sThumbRY / 32768.0f),
-				LeftTrigger = (inputStatesCurrent.Gamepad.bLeftTrigger / 255.0f),
-				RightTrigger = (inputStatesCurrent.Gamepad.bRightTrigger / 255.0f)
-			};
-		}
+		//public ControllerState GetControllerState()
+		//{
+		//	return new ControllerState
+		//	{
+		//		Buttons = inputStatesCurrent.Gamepad.Buttons,
+		//		LeftThumbstick = new ThumbstickPosition(inputStatesCurrent.Gamepad.sThumbLX / 32768.0f, inputStatesCurrent.Gamepad.sThumbLY / 32768.0f),
+		//		RightThumbstick = new ThumbstickPosition(inputStatesCurrent.Gamepad.sThumbRX / 32768.0f, inputStatesCurrent.Gamepad.sThumbRY / 32768.0f),
+		//		LeftTrigger = (inputStatesCurrent.Gamepad.bLeftTrigger / 255.0f),
+		//		RightTrigger = (inputStatesCurrent.Gamepad.bRightTrigger / 255.0f)
+		//	};
+		//}
 
 		public bool IsDPadUpPressed()
 		{

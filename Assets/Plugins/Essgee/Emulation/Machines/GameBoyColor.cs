@@ -179,10 +179,11 @@ namespace Essgee.Emulation.Machines
 
 			video.EndOfScanline += (s, e) =>
 			{
-				PollInputEventArgs pollInputEventArgs = new PollInputEventArgs();
+				PollInputEventArgs pollInputEventArgs = PollInputEventArgs.Create();
 				OnPollInput(pollInputEventArgs);
 				ParseInput(pollInputEventArgs);
-			};
+                pollInputEventArgs.Release();
+            };
 		}
 
 		public void SetConfiguration(IConfiguration config)
@@ -262,9 +263,11 @@ namespace Essgee.Emulation.Machines
 			currentMasterClockCyclesInFrame = 0;
 			totalMasterClockCyclesInFrame = (int)Math.Round(masterClock / refreshRate);
 
-			/* Announce viewport */
-			OnChangeViewport(new ChangeViewportEventArgs(video.Viewport));
-		}
+            /* Announce viewport */
+            var eventArgs = ChangeViewportEventArgs.Create(video.Viewport);
+            OnChangeViewport(eventArgs);
+            eventArgs.Release();
+        }
 
 		private void LoadBootstrap()
 		{
@@ -591,14 +594,14 @@ namespace Essgee.Emulation.Machines
 			}
 
 			/* XInput controller */
-			if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) inputsPressed |= JoypadInputs.Right;
-			if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) inputsPressed |= JoypadInputs.Left;
-			if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) inputsPressed |= JoypadInputs.Up;
-			if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) inputsPressed |= JoypadInputs.Down;
-			if (eventArgs.ControllerState.IsAPressed()) inputsPressed |= JoypadInputs.A;
-			if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) inputsPressed |= JoypadInputs.B;
-			if (eventArgs.ControllerState.IsBackPressed()) inputsPressed |= JoypadInputs.Select;
-			if (eventArgs.ControllerState.IsStartPressed()) inputsPressed |= JoypadInputs.Start;
+			//if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) inputsPressed |= JoypadInputs.Right;
+			//if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) inputsPressed |= JoypadInputs.Left;
+			//if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) inputsPressed |= JoypadInputs.Up;
+			//if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) inputsPressed |= JoypadInputs.Down;
+			//if (eventArgs.ControllerState.IsAPressed()) inputsPressed |= JoypadInputs.A;
+			//if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) inputsPressed |= JoypadInputs.B;
+			//if (eventArgs.ControllerState.IsBackPressed()) inputsPressed |= JoypadInputs.Select;
+			//if (eventArgs.ControllerState.IsStartPressed()) inputsPressed |= JoypadInputs.Start;
 		}
 
 		private byte ReadMemory(ushort address)

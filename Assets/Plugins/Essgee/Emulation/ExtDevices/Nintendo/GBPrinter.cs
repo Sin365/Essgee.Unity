@@ -252,8 +252,10 @@ namespace Essgee.Emulation.ExtDevices.Nintendo
 								if (packet.isCompressed)
 								{
 									/* Decompress RLE first! */
-									List<byte> decomp = new List<byte>();
-									int ofs = 0, numbytes = 0;
+									//List<byte> decomp = new List<byte>();
+									List<byte> decomp = ObjectPoolAuto.AcquireList<byte>();
+
+                                    int ofs = 0, numbytes = 0;
 									while (ofs < packet.dataLen)
 									{
 										if ((packet.data[ofs] & 0x80) != 0)
@@ -273,7 +275,9 @@ namespace Essgee.Emulation.ExtDevices.Nintendo
 									}
 									packet.data = decomp.ToArray();
 									packet.dataLen = (ushort)decomp.Count;
-								}
+
+									ObjectPoolAuto.Release(decomp);
+                                }
 
 								imageData.AddRange(packet.data);
 								imageHeight += (packet.data.Length / 0x28);

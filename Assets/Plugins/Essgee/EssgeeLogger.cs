@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public interface IEssgeeLogger
@@ -34,4 +35,11 @@ public static class EssgeeLogger
         essgeeLogger.Warning(message);
     }
 
+    internal static void Assert(bool condition, string message)
+    {
+        if (!condition)
+        {
+            essgeeLogger.Debug(message);
+        }
+    }
 }

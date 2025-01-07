@@ -130,10 +130,11 @@ namespace Essgee.Emulation.Machines
 
 			vdp.EndOfScanline += (s, e) =>
 			{
-				PollInputEventArgs pollInputEventArgs = new PollInputEventArgs();
+				PollInputEventArgs pollInputEventArgs = PollInputEventArgs.Create();
 				OnPollInput(pollInputEventArgs);
 				ParseInput(pollInputEventArgs);
-			};
+                pollInputEventArgs.Release();
+            };
 		}
 
 		public void SetConfiguration(IConfiguration config)
@@ -189,8 +190,11 @@ namespace Essgee.Emulation.Machines
 			currentMasterClockCyclesInFrame = 0;
 			totalMasterClockCyclesInFrame = (int)Math.Round(masterClock / RefreshRate);
 
-			OnChangeViewport(new ChangeViewportEventArgs(vdp.Viewport));
-		}
+			var eventArgs = ChangeViewportEventArgs.Create(vdp.Viewport);
+            OnChangeViewport(eventArgs);
+			eventArgs.Release();
+
+        }
 
 		public void Startup()
 		{
@@ -346,12 +350,12 @@ namespace Essgee.Emulation.Machines
 			if (keysDown.Contains(configuration.Joypad2Button2)) portIoBMiscPressed |= PortIoBMiscValues.P2Button2;
 
 			/* XInput controller */
-			if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) portIoABPressed |= PortIoABValues.P1Up;
-			if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) portIoABPressed |= PortIoABValues.P1Down;
-			if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) portIoABPressed |= PortIoABValues.P1Left;
-			if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) portIoABPressed |= PortIoABValues.P1Right;
-			if (eventArgs.ControllerState.IsAPressed()) portIoABPressed |= PortIoABValues.P1Button1;
-			if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) portIoABPressed |= PortIoABValues.P1Button2;
+			//if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) portIoABPressed |= PortIoABValues.P1Up;
+			//if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) portIoABPressed |= PortIoABValues.P1Down;
+			//if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) portIoABPressed |= PortIoABValues.P1Left;
+			//if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) portIoABPressed |= PortIoABValues.P1Right;
+			//if (eventArgs.ControllerState.IsAPressed()) portIoABPressed |= PortIoABValues.P1Button1;
+			//if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) portIoABPressed |= PortIoABValues.P1Button2;
 
 			portIoBMiscPressed |= (PortIoBMiscValues.IC21Pin6 | PortIoBMiscValues.IC21Pin10 | PortIoBMiscValues.IC21Pin13);       /* Unused, always 1 */
 		}

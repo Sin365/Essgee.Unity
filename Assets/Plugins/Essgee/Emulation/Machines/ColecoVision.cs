@@ -129,10 +129,12 @@ namespace Essgee.Emulation.Machines
 
 			vdp.EndOfScanline += (s, e) =>
 			{
-				PollInputEventArgs pollInputEventArgs = new PollInputEventArgs();
+				PollInputEventArgs pollInputEventArgs = PollInputEventArgs.Create();
 				OnPollInput(pollInputEventArgs);
 				ParseInput(pollInputEventArgs);
-			};
+                pollInputEventArgs.Release();
+
+            };
 		}
 
 		public void SetConfiguration(IConfiguration config)
@@ -177,8 +179,10 @@ namespace Essgee.Emulation.Machines
 			currentMasterClockCyclesInFrame = 0;
 			totalMasterClockCyclesInFrame = (int)Math.Round(masterClock / refreshRate);
 
-			OnChangeViewport(new ChangeViewportEventArgs(vdp.Viewport));
-		}
+            var eventArgs = ChangeViewportEventArgs.Create(vdp.Viewport);
+            OnChangeViewport(eventArgs);
+            eventArgs.Release();
+        }
 
 		private void LoadBios()
 		{

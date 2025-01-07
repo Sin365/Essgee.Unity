@@ -138,10 +138,11 @@ namespace Essgee.Emulation.Machines
 
 			vdp.EndOfScanline += (s, e) =>
 			{
-				PollInputEventArgs pollInputEventArgs = new PollInputEventArgs();
+				PollInputEventArgs pollInputEventArgs = PollInputEventArgs.Create();
 				OnPollInput(pollInputEventArgs);
 				ParseInput(pollInputEventArgs);
-			};
+                pollInputEventArgs.Release();
+            };
 		}
 
 		public void SetConfiguration(IConfiguration config)
@@ -186,8 +187,10 @@ namespace Essgee.Emulation.Machines
 			currentMasterClockCyclesInFrame = 0;
 			totalMasterClockCyclesInFrame = (int)Math.Round(masterClock / refreshRate);
 
-			OnChangeViewport(new ChangeViewportEventArgs(vdp.Viewport));
-		}
+            var eventArgs = ChangeViewportEventArgs.Create(vdp.Viewport);
+            OnChangeViewport(eventArgs);
+            eventArgs.Release();
+        }
 
 		private void LoadBootstrap()
 		{
@@ -373,13 +376,13 @@ namespace Essgee.Emulation.Machines
 			if (eventArgs.Keyboard.Contains(configuration.ControlsStart)) portCInputsPressed |= IOPortCInputs.Start;
 
 			/* XInput controller */
-			if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortAUp;
-			if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortADown;
-			if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortALeft;
-			if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortARight;
-			if (eventArgs.ControllerState.IsAPressed()) portAInputsPressed |= IOPortABInputs.PortATL;
-			if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) portAInputsPressed |= IOPortABInputs.PortATR;
-			if (eventArgs.ControllerState.IsStartPressed()) portCInputsPressed |= IOPortCInputs.Start;
+			//if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortAUp;
+			//if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortADown;
+			//if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortALeft;
+			//if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) portAInputsPressed |= IOPortABInputs.PortARight;
+			//if (eventArgs.ControllerState.IsAPressed()) portAInputsPressed |= IOPortABInputs.PortATL;
+			//if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) portAInputsPressed |= IOPortABInputs.PortATR;
+			//if (eventArgs.ControllerState.IsStartPressed()) portCInputsPressed |= IOPortCInputs.Start;
 
 			portIoAB |= (byte)(IOPortABInputs.PortAUp | IOPortABInputs.PortADown | IOPortABInputs.PortALeft | IOPortABInputs.PortARight | IOPortABInputs.PortATL | IOPortABInputs.PortATR | IOPortABInputs.PortBUp | IOPortABInputs.PortBDown);
 			portIoBMisc |= (byte)(IOPortBMiscInputs.PortBLeft | IOPortBMiscInputs.PortBRight | IOPortBMiscInputs.PortBTL | IOPortBMiscInputs.PortBTR | IOPortBMiscInputs.Reset | IOPortBMiscInputs.CartSlotCONTPin | IOPortBMiscInputs.PortATH | IOPortBMiscInputs.PortBTH);

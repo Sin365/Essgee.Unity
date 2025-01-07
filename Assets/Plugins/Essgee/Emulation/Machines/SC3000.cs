@@ -144,10 +144,11 @@ namespace Essgee.Emulation.Machines
 
 			vdp.EndOfScanline += (s, e) =>
 			{
-				PollInputEventArgs pollInputEventArgs = new PollInputEventArgs();
+				PollInputEventArgs pollInputEventArgs = PollInputEventArgs.Create();
 				OnPollInput(pollInputEventArgs);
 				ParseInput(pollInputEventArgs);
-			};
+                pollInputEventArgs.Release();
+            };
 		}
 
 		public void SetConfiguration(IConfiguration config)
@@ -203,8 +204,10 @@ namespace Essgee.Emulation.Machines
 			currentMasterClockCyclesInFrame = 0;
 			totalMasterClockCyclesInFrame = (int)Math.Round(masterClock / RefreshRate);
 
-			OnChangeViewport(new ChangeViewportEventArgs(vdp.Viewport));
-		}
+            var eventArgs = ChangeViewportEventArgs.Create(vdp.Viewport);
+            OnChangeViewport(eventArgs);
+            eventArgs.Release();
+        }
 
 		public void Startup()
 		{
@@ -360,8 +363,11 @@ namespace Essgee.Emulation.Machines
 			{
 				keyboardMode = !keyboardMode;
 				var modeString = (keyboardMode ? "keyboard" : "controller");
-				SendLogMessage(this, new SendLogMessageEventArgs($"Selected {modeString} mode."));
-			}
+				var logeventArgs = SendLogMessageEventArgs.Create($"Selected {modeString} mode.");
+                SendLogMessage(this, logeventArgs);
+				logeventArgs.Release();
+
+            }
 			changeInputButtonPressed = keysDown.Contains(configuration.InputChangeMode);
 
 			/* Toggle tape playback */
@@ -369,7 +375,9 @@ namespace Essgee.Emulation.Machines
 			{
 				isTapePlaying = !isTapePlaying;
 				var playString = (isTapePlaying ? "playing" : "stopped");
-				SendLogMessage(this, new SendLogMessageEventArgs($"Tape is {playString}."));
+				var logeventArgs = SendLogMessageEventArgs.Create($"Tape is {playString}.");
+                SendLogMessage(this, logeventArgs);
+				logeventArgs.Release();
 			}
 			tapePlayButtonPressed = keysDown.Contains(configuration.InputPlayTape);
 
@@ -478,12 +486,12 @@ namespace Essgee.Emulation.Machines
 				if (keysDown.Contains(configuration.Joypad2Button2)) portBInputsPressed |= PortBInputs.P2Button2;
 
 				/* XInput controller */
-				if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) portAInputsPressed |= PortAInputs.P1Up;
-				if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) portAInputsPressed |= PortAInputs.P1Down;
-				if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) portAInputsPressed |= PortAInputs.P1Left;
-				if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) portAInputsPressed |= PortAInputs.P1Right;
-				if (eventArgs.ControllerState.IsAPressed()) portAInputsPressed |= PortAInputs.P1Button1;
-				if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) portAInputsPressed |= PortAInputs.P1Button2;
+				//if (eventArgs.ControllerState.IsAnyUpDirectionPressed() && !eventArgs.ControllerState.IsAnyDownDirectionPressed()) portAInputsPressed |= PortAInputs.P1Up;
+				//if (eventArgs.ControllerState.IsAnyDownDirectionPressed() && !eventArgs.ControllerState.IsAnyUpDirectionPressed()) portAInputsPressed |= PortAInputs.P1Down;
+				//if (eventArgs.ControllerState.IsAnyLeftDirectionPressed() && !eventArgs.ControllerState.IsAnyRightDirectionPressed()) portAInputsPressed |= PortAInputs.P1Left;
+				//if (eventArgs.ControllerState.IsAnyRightDirectionPressed() && !eventArgs.ControllerState.IsAnyLeftDirectionPressed()) portAInputsPressed |= PortAInputs.P1Right;
+				//if (eventArgs.ControllerState.IsAPressed()) portAInputsPressed |= PortAInputs.P1Button1;
+				//if (eventArgs.ControllerState.IsXPressed() || eventArgs.ControllerState.IsBPressed()) portAInputsPressed |= PortAInputs.P1Button2;
 			}
 		}
 

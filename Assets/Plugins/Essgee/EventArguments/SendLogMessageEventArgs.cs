@@ -1,18 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Essgee.EventArguments
 {
-	public class SendLogMessageEventArgs : EventArgs
+    public class SendLogMessageEventArgs : EventArgs
 	{
 		public string Message { get; private set; }
 
-		public SendLogMessageEventArgs(string message)
+
+		public static SendLogMessageEventArgs Create(string message)
 		{
-			Message = message;
-		}
-	}
+			var eventArgs = ObjectPoolAuto.Acquire<SendLogMessageEventArgs>();
+            eventArgs.Message = message;
+            return eventArgs;
+        }
+    }
+	public static class SendLogMessageEventArgsEx
+    {
+        public static void Release(this SendLogMessageEventArgs eventArgs)
+        {
+            ObjectPoolAuto.Release(eventArgs);
+        }
+    }
 }
