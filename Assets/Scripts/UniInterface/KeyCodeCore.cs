@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class KeyCodeCore
 {
-    public Dictionary<KeyCode, MotionKey> dictKeyCfgs = new Dictionary<KeyCode, MotionKey>();
+    public Dictionary<KeyCode, EssgeeMotionKey> dictKeyCfgs = new Dictionary<KeyCode, EssgeeMotionKey>();
     public KeyCode[] CheckList;
-    public MotionKey[] mCurrKey = new MotionKey[0];
+    public EssgeeMotionKey[] mCurrKey = new EssgeeMotionKey[0];
     //public ulong CurryInpuAllData = 0;
-    List<MotionKey> temp = new List<MotionKey>();
+    List<EssgeeMotionKey> temp = new List<EssgeeMotionKey>();
     ulong tempInputAllData = 0;
     UniKeyboard mUniKeyboard;
     //bool bReplayMode;
@@ -16,7 +16,7 @@ public class KeyCodeCore
 
     ulong last_CurryInpuAllData_test = 0;
 
-    public MotionKey[] GetPressedKeys()
+    public EssgeeMotionKey[] GetPressedKeys()
     {
         return mCurrKey;
 
@@ -252,7 +252,7 @@ public class KeyCodeCore
         {
             if (Input.GetKey(CheckList[i]))
             {
-                MotionKey mk = dictKeyCfgs[CheckList[i]];
+                EssgeeMotionKey mk = dictKeyCfgs[CheckList[i]];
                 temp.Add(mk);
                 tempInputAllData |= (ulong)mk;
             }

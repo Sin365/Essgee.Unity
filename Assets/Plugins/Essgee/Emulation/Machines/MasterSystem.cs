@@ -124,7 +124,7 @@ namespace Essgee.Emulation.Machines
 
 		public Configuration.MasterSystem configuration { get; private set; }
 
-		List<MotionKey> lastKeysDown;
+		List<EssgeeMotionKey> lastKeysDown;
 		//ControllerState lastControllerState;
 		MouseButtons lastMouseButtons;
 		(int x, int y) lastMousePosition;
@@ -145,7 +145,7 @@ namespace Essgee.Emulation.Machines
 			inputDevices[0] = InputDevice.None;
 			inputDevices[1] = InputDevice.None;
 
-			lastKeysDown = new List<MotionKey>();
+			lastKeysDown = new List<EssgeeMotionKey>();
 			//lastControllerState = new ControllerState();
 
 			vdp.EndOfScanline += (s, e) =>

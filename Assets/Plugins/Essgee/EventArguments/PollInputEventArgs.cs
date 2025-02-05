@@ -6,7 +6,7 @@ namespace Essgee.EventArguments
 {
     public class PollInputEventArgs : EventArgs
     {
-        public List<MotionKey> Keyboard { get; set; }
+        public List<EssgeeMotionKey> Keyboard { get; set; }
 
         public MouseButtons MouseButtons { get; set; }
         public (int X, int Y) MousePosition { get; set; }
@@ -27,7 +27,7 @@ namespace Essgee.EventArguments
         {
             var eventArgs = ObjectPoolAuto.Acquire<PollInputEventArgs>();
             //eventArgs.Keyboard = new List<MotionKey>();
-            eventArgs.Keyboard = ObjectPoolAuto.AcquireList<MotionKey>();
+            eventArgs.Keyboard = ObjectPoolAuto.AcquireList<EssgeeMotionKey>();
             eventArgs.MouseButtons = MouseButtons.None;
             eventArgs.MousePosition = (0, 0);
 

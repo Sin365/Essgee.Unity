@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.Drawing;
-
+﻿using Essgee.Emulation.Configuration;
+using Essgee.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-
-using Essgee.Emulation.Configuration;
-using Essgee.Utilities;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Essgee
 {
-	public class Configuration
+    public class Configuration
 	{
 		public const int RecentFilesCapacity = 15;
 		public const string DefaultShaderName = "Basic";

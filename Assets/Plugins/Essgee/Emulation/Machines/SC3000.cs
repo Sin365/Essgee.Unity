@@ -386,84 +386,84 @@ namespace Essgee.Emulation.Machines
 				/* Handle keyboard */
 
 				// TODO: Replace hardcoded English layout w/ user-configurable settings
-				keyboard[0, 0] = keysDown.Contains(MotionKey.D1);
-				keyboard[0, 1] = keysDown.Contains(MotionKey.D2);
-				keyboard[0, 2] = keysDown.Contains(MotionKey.D3);
-				keyboard[0, 3] = keysDown.Contains(MotionKey.D4);
-				keyboard[0, 4] = keysDown.Contains(MotionKey.D5);
-				keyboard[0, 5] = keysDown.Contains(MotionKey.D6);
-				keyboard[0, 6] = keysDown.Contains(MotionKey.D7);
+				keyboard[0, 0] = keysDown.Contains(EssgeeMotionKey.D1);
+				keyboard[0, 1] = keysDown.Contains(EssgeeMotionKey.D2);
+				keyboard[0, 2] = keysDown.Contains(EssgeeMotionKey.D3);
+				keyboard[0, 3] = keysDown.Contains(EssgeeMotionKey.D4);
+				keyboard[0, 4] = keysDown.Contains(EssgeeMotionKey.D5);
+				keyboard[0, 5] = keysDown.Contains(EssgeeMotionKey.D6);
+				keyboard[0, 6] = keysDown.Contains(EssgeeMotionKey.D7);
 
-				keyboard[1, 0] = keysDown.Contains(MotionKey.Q);
-				keyboard[1, 1] = keysDown.Contains(MotionKey.W);
-				keyboard[1, 2] = keysDown.Contains(MotionKey.E);
-				keyboard[1, 3] = keysDown.Contains(MotionKey.R);
-				keyboard[1, 4] = keysDown.Contains(MotionKey.T);
-				keyboard[1, 5] = keysDown.Contains(MotionKey.Y);
-				keyboard[1, 6] = keysDown.Contains(MotionKey.U);
+				keyboard[1, 0] = keysDown.Contains(EssgeeMotionKey.Q);
+				keyboard[1, 1] = keysDown.Contains(EssgeeMotionKey.W);
+				keyboard[1, 2] = keysDown.Contains(EssgeeMotionKey.E);
+				keyboard[1, 3] = keysDown.Contains(EssgeeMotionKey.R);
+				keyboard[1, 4] = keysDown.Contains(EssgeeMotionKey.T);
+				keyboard[1, 5] = keysDown.Contains(EssgeeMotionKey.Y);
+				keyboard[1, 6] = keysDown.Contains(EssgeeMotionKey.U);
 
-				keyboard[2, 0] = keysDown.Contains(MotionKey.A);
-				keyboard[2, 1] = keysDown.Contains(MotionKey.S);
-				keyboard[2, 2] = keysDown.Contains(MotionKey.D);
-				keyboard[2, 3] = keysDown.Contains(MotionKey.F);
-				keyboard[2, 4] = keysDown.Contains(MotionKey.G);
-				keyboard[2, 5] = keysDown.Contains(MotionKey.H);
-				keyboard[2, 6] = keysDown.Contains(MotionKey.J);
+				keyboard[2, 0] = keysDown.Contains(EssgeeMotionKey.A);
+				keyboard[2, 1] = keysDown.Contains(EssgeeMotionKey.S);
+				keyboard[2, 2] = keysDown.Contains(EssgeeMotionKey.D);
+				keyboard[2, 3] = keysDown.Contains(EssgeeMotionKey.F);
+				keyboard[2, 4] = keysDown.Contains(EssgeeMotionKey.G);
+				keyboard[2, 5] = keysDown.Contains(EssgeeMotionKey.H);
+				keyboard[2, 6] = keysDown.Contains(EssgeeMotionKey.J);
 
-				keyboard[3, 0] = keysDown.Contains(MotionKey.Z);
-				keyboard[3, 1] = keysDown.Contains(MotionKey.X);
-				keyboard[3, 2] = keysDown.Contains(MotionKey.C);
-				keyboard[3, 3] = keysDown.Contains(MotionKey.V);
-				keyboard[3, 4] = keysDown.Contains(MotionKey.B);
-				keyboard[3, 5] = keysDown.Contains(MotionKey.N);
-				keyboard[3, 6] = keysDown.Contains(MotionKey.M);
+				keyboard[3, 0] = keysDown.Contains(EssgeeMotionKey.Z);
+				keyboard[3, 1] = keysDown.Contains(EssgeeMotionKey.X);
+				keyboard[3, 2] = keysDown.Contains(EssgeeMotionKey.C);
+				keyboard[3, 3] = keysDown.Contains(EssgeeMotionKey.V);
+				keyboard[3, 4] = keysDown.Contains(EssgeeMotionKey.B);
+				keyboard[3, 5] = keysDown.Contains(EssgeeMotionKey.N);
+				keyboard[3, 6] = keysDown.Contains(EssgeeMotionKey.M);
 
-				keyboard[4, 0] = keysDown.Contains(MotionKey.None);             // Alphanumerics, Eng Dier's
-				keyboard[4, 1] = keysDown.Contains(MotionKey.Space);
-				keyboard[4, 2] = keysDown.Contains(MotionKey.Home);             // Clr, Home
-				keyboard[4, 3] = keysDown.Contains(MotionKey.Back);             // Del, Ins
-				keyboard[4, 4] = keysDown.Contains(MotionKey.None);             // Not on English keyboard?
-				keyboard[4, 5] = keysDown.Contains(MotionKey.None);             // ""
-				keyboard[4, 6] = keysDown.Contains(MotionKey.None);             // ""
+				keyboard[4, 0] = keysDown.Contains(EssgeeMotionKey.None);             // Alphanumerics, Eng Dier's
+				keyboard[4, 1] = keysDown.Contains(EssgeeMotionKey.Space);
+				keyboard[4, 2] = keysDown.Contains(EssgeeMotionKey.Home);             // Clr, Home
+				keyboard[4, 3] = keysDown.Contains(EssgeeMotionKey.Back);             // Del, Ins
+				keyboard[4, 4] = keysDown.Contains(EssgeeMotionKey.None);             // Not on English keyboard?
+				keyboard[4, 5] = keysDown.Contains(EssgeeMotionKey.None);             // ""
+				keyboard[4, 6] = keysDown.Contains(EssgeeMotionKey.None);             // ""
 
-				keyboard[5, 0] = keysDown.Contains(MotionKey.Oemcomma);
-				keyboard[5, 1] = keysDown.Contains(MotionKey.OemPeriod);
-				keyboard[5, 2] = keysDown.Contains(MotionKey.OemQuestion);      // Forward slash
-				keyboard[5, 3] = keysDown.Contains(MotionKey.None);             // Pi
-				keyboard[5, 4] = keysDown.Contains(MotionKey.Down);
-				keyboard[5, 5] = keysDown.Contains(MotionKey.Left);
-				keyboard[5, 6] = keysDown.Contains(MotionKey.Right);
+				keyboard[5, 0] = keysDown.Contains(EssgeeMotionKey.Oemcomma);
+				keyboard[5, 1] = keysDown.Contains(EssgeeMotionKey.OemPeriod);
+				keyboard[5, 2] = keysDown.Contains(EssgeeMotionKey.OemQuestion);      // Forward slash
+				keyboard[5, 3] = keysDown.Contains(EssgeeMotionKey.None);             // Pi
+				keyboard[5, 4] = keysDown.Contains(EssgeeMotionKey.Down);
+				keyboard[5, 5] = keysDown.Contains(EssgeeMotionKey.Left);
+				keyboard[5, 6] = keysDown.Contains(EssgeeMotionKey.Right);
 
-				keyboard[6, 0] = keysDown.Contains(MotionKey.K);
-				keyboard[6, 1] = keysDown.Contains(MotionKey.L);
-				keyboard[6, 2] = keysDown.Contains(MotionKey.Oemplus);          // Semicolon
-				keyboard[6, 3] = keysDown.Contains(MotionKey.OemSemicolon);     // Colon
-				keyboard[6, 4] = keysDown.Contains(MotionKey.OemCloseBrackets);
-				keyboard[6, 5] = keysDown.Contains(MotionKey.Enter);
-				keyboard[6, 6] = keysDown.Contains(MotionKey.Up);
+				keyboard[6, 0] = keysDown.Contains(EssgeeMotionKey.K);
+				keyboard[6, 1] = keysDown.Contains(EssgeeMotionKey.L);
+				keyboard[6, 2] = keysDown.Contains(EssgeeMotionKey.Oemplus);          // Semicolon
+				keyboard[6, 3] = keysDown.Contains(EssgeeMotionKey.OemSemicolon);     // Colon
+				keyboard[6, 4] = keysDown.Contains(EssgeeMotionKey.OemCloseBrackets);
+				keyboard[6, 5] = keysDown.Contains(EssgeeMotionKey.Enter);
+				keyboard[6, 6] = keysDown.Contains(EssgeeMotionKey.Up);
 
-				keyboard[7, 0] = keysDown.Contains(MotionKey.I);
-				keyboard[7, 1] = keysDown.Contains(MotionKey.O);
-				keyboard[7, 2] = keysDown.Contains(MotionKey.P);
-				keyboard[7, 3] = keysDown.Contains(MotionKey.PageUp);           // @
-				keyboard[7, 4] = keysDown.Contains(MotionKey.OemOpenBrackets);
-				keyboard[7, 5] = keysDown.Contains(MotionKey.None);             // Not on English keyboard?
-				keyboard[7, 6] = keysDown.Contains(MotionKey.None);             // ""
+				keyboard[7, 0] = keysDown.Contains(EssgeeMotionKey.I);
+				keyboard[7, 1] = keysDown.Contains(EssgeeMotionKey.O);
+				keyboard[7, 2] = keysDown.Contains(EssgeeMotionKey.P);
+				keyboard[7, 3] = keysDown.Contains(EssgeeMotionKey.PageUp);           // @
+				keyboard[7, 4] = keysDown.Contains(EssgeeMotionKey.OemOpenBrackets);
+				keyboard[7, 5] = keysDown.Contains(EssgeeMotionKey.None);             // Not on English keyboard?
+				keyboard[7, 6] = keysDown.Contains(EssgeeMotionKey.None);             // ""
 
-				keyboard[8, 0] = keysDown.Contains(MotionKey.D8);
-				keyboard[8, 1] = keysDown.Contains(MotionKey.D9);
-				keyboard[8, 2] = keysDown.Contains(MotionKey.D0);
-				keyboard[8, 3] = keysDown.Contains(MotionKey.OemMinus);
-				keyboard[8, 4] = keysDown.Contains(MotionKey.Oemtilde);         // ^, ~
-				keyboard[8, 5] = keysDown.Contains(MotionKey.OemPipe);          // Yen, Pipe, Pound?
-				keyboard[8, 6] = keysDown.Contains(MotionKey.PageDown);         // Break
+				keyboard[8, 0] = keysDown.Contains(EssgeeMotionKey.D8);
+				keyboard[8, 1] = keysDown.Contains(EssgeeMotionKey.D9);
+				keyboard[8, 2] = keysDown.Contains(EssgeeMotionKey.D0);
+				keyboard[8, 3] = keysDown.Contains(EssgeeMotionKey.OemMinus);
+				keyboard[8, 4] = keysDown.Contains(EssgeeMotionKey.Oemtilde);         // ^, ~
+				keyboard[8, 5] = keysDown.Contains(EssgeeMotionKey.OemPipe);          // Yen, Pipe, Pound?
+				keyboard[8, 6] = keysDown.Contains(EssgeeMotionKey.PageDown);         // Break
 
-				keyboard[9, 6] = keysDown.Contains(MotionKey.RControlKey);      // Graph
+				keyboard[9, 6] = keysDown.Contains(EssgeeMotionKey.RControlKey);      // Graph
 
-				keyboard[10, 6] = keysDown.Contains(MotionKey.LControlKey);     // Ctrl
+				keyboard[10, 6] = keysDown.Contains(EssgeeMotionKey.LControlKey);     // Ctrl
 
-				keyboard[11, 5] = keysDown.Contains(MotionKey.Tab);             // Func
-				keyboard[11, 6] = keysDown.Contains(MotionKey.ShiftKey);        // Shift
+				keyboard[11, 5] = keysDown.Contains(EssgeeMotionKey.Tab);             // Func
+				keyboard[11, 6] = keysDown.Contains(EssgeeMotionKey.ShiftKey);        // Shift
 			}
 			else
 			{

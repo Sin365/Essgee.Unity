@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Essgee.Utilities
 {
-	public class TypeNameJsonConverter : JsonConverter
+    public class TypeNameJsonConverter : JsonConverter
 	{
 		readonly string searchNamespace;
 

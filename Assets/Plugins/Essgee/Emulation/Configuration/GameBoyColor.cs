@@ -33,31 +33,31 @@ namespace Essgee.Emulation.Configuration
 
 		//todo Unity [DropDownControl("Controls", "Up", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsUp { get; set; }
+		public EssgeeMotionKey ControlsUp { get; set; }
 		//todo Unity [DropDownControl("Controls", "Down", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsDown { get; set; }
+		public EssgeeMotionKey ControlsDown { get; set; }
 		//todo Unity [DropDownControl("Controls", "Left", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsLeft { get; set; }
+		public EssgeeMotionKey ControlsLeft { get; set; }
 		//todo Unity [DropDownControl("Controls", "Right", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsRight { get; set; }
+		public EssgeeMotionKey ControlsRight { get; set; }
 		//todo Unity [DropDownControl("Controls", "A", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsA { get; set; }
+		public EssgeeMotionKey ControlsA { get; set; }
 		//todo Unity [DropDownControl("Controls", "B", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsB { get; set; }
+		public EssgeeMotionKey ControlsB { get; set; }
 		//todo Unity [DropDownControl("Controls", "Select", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsSelect { get; set; }
+		public EssgeeMotionKey ControlsSelect { get; set; }
 		//todo Unity [DropDownControl("Controls", "Start", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsStart { get; set; }
+		public EssgeeMotionKey ControlsStart { get; set; }
 		//todo Unity [DropDownControl("Controls", "Send IR Signal", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey ControlsSendIR { get; set; }
+		public EssgeeMotionKey ControlsSendIR { get; set; }
 
 		public GameBoyColor()
 		{
@@ -71,15 +71,15 @@ namespace Essgee.Emulation.Configuration
 			InfraredSource = Machines.GameBoyColor.InfraredSources.None;
 			InfraredDatabasePikachu = string.Empty;
 
-			ControlsUp = MotionKey.Up;
-			ControlsDown = MotionKey.Down;
-			ControlsLeft = MotionKey.Left;
-			ControlsRight = MotionKey.Right;
-			ControlsA = MotionKey.S;
-			ControlsB = MotionKey.A;
-			ControlsSelect = MotionKey.Space;
-			ControlsStart = MotionKey.Enter;
-			ControlsSendIR = MotionKey.Back;
+			ControlsUp = EssgeeMotionKey.Up;
+			ControlsDown = EssgeeMotionKey.Down;
+			ControlsLeft = EssgeeMotionKey.Left;
+			ControlsRight = EssgeeMotionKey.Right;
+			ControlsA = EssgeeMotionKey.S;
+			ControlsB = EssgeeMotionKey.A;
+			ControlsSelect = EssgeeMotionKey.Space;
+			ControlsStart = EssgeeMotionKey.Enter;
+			ControlsSendIR = EssgeeMotionKey.Back;
 		}
 	}
 }

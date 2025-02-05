@@ -1,11 +1,9 @@
-using System.Runtime.InteropServices;
 using System;
-using UnityEngine;
-using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 [Flags]
 [ComVisible(true)]
-public enum MotionKey
+public enum EssgeeMotionKey
 {
     KeyCode = 0xFFFF,
     Modifiers = -65536,

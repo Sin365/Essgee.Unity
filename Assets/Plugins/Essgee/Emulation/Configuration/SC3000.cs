@@ -12,75 +12,75 @@ namespace Essgee.Emulation.Configuration
 
 		//todo Unity [DropDownControl("General", "Reset Button", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey InputReset { get; set; }
+		public EssgeeMotionKey InputReset { get; set; }
 
 		//todo Unity [DropDownControl("General", "Change Input Mode", typeof(Keys), Keys.F11, Tooltip = "Selects which PC keyboard key is used to switch between SC-3000 keyboard and controller input.")]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey InputChangeMode { get; set; }
+		public EssgeeMotionKey InputChangeMode { get; set; }
 
 		//todo Unity [DropDownControl("General", "Play Tape", typeof(Keys), Keys.F11, Tooltip = "Note that tape emulation is currently non-functional.")]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey InputPlayTape { get; set; }
+		public EssgeeMotionKey InputPlayTape { get; set; }
 
 		//todo Unity [DropDownControl("Controller Port 1", "D-Pad Up", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad1Up { get; set; }
+		public EssgeeMotionKey Joypad1Up { get; set; }
 		//todo Unity [DropDownControl("Controller Port 1", "D-Pad Down", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad1Down { get; set; }
+		public EssgeeMotionKey Joypad1Down { get; set; }
 		//todo Unity [DropDownControl("Controller Port 1", "D-Pad Left", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad1Left { get; set; }
+		public EssgeeMotionKey Joypad1Left { get; set; }
 		//todo Unity [DropDownControl("Controller Port 1", "D-Pad Right", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad1Right { get; set; }
+		public EssgeeMotionKey Joypad1Right { get; set; }
 		//todo Unity [DropDownControl("Controller Port 1", "Button 1", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad1Button1 { get; set; }
+		public EssgeeMotionKey Joypad1Button1 { get; set; }
 		//todo Unity [DropDownControl("Controller Port 1", "Button 2", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad1Button2 { get; set; }
+		public EssgeeMotionKey Joypad1Button2 { get; set; }
 
 		//todo Unity [DropDownControl("Controller Port 2", "D-Pad Up", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad2Up { get; set; }
+		public EssgeeMotionKey Joypad2Up { get; set; }
 		//todo Unity [DropDownControl("Controller Port 2", "D-Pad Down", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad2Down { get; set; }
+		public EssgeeMotionKey Joypad2Down { get; set; }
 		//todo Unity [DropDownControl("Controller Port 2", "D-Pad Left", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad2Left { get; set; }
+		public EssgeeMotionKey Joypad2Left { get; set; }
 		//todo Unity [DropDownControl("Controller Port 2", "D-Pad Right", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad2Right { get; set; }
+		public EssgeeMotionKey Joypad2Right { get; set; }
 		//todo Unity [DropDownControl("Controller Port 2", "Button 1", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad2Button1 { get; set; }
+		public EssgeeMotionKey Joypad2Button1 { get; set; }
 		//todo Unity [DropDownControl("Controller Port 2", "Button 2", typeof(Keys), Keys.F11)]
 		[JsonConverter(typeof(StringEnumConverter))]
-		public MotionKey Joypad2Button2 { get; set; }
+		public EssgeeMotionKey Joypad2Button2 { get; set; }
 
 		public SC3000()
 		{
 			TVStandard = TVStandard.NTSC;
 
-			InputReset = MotionKey.F12;
-			InputChangeMode = MotionKey.F1;
-			InputPlayTape = MotionKey.F2;
+			InputReset = EssgeeMotionKey.F12;
+			InputChangeMode = EssgeeMotionKey.F1;
+			InputPlayTape = EssgeeMotionKey.F2;
 
-			Joypad1Up = MotionKey.Up;
-			Joypad1Down = MotionKey.Down;
-			Joypad1Left = MotionKey.Left;
-			Joypad1Right = MotionKey.Right;
-			Joypad1Button1 = MotionKey.A;
-			Joypad1Button2 = MotionKey.S;
+			Joypad1Up = EssgeeMotionKey.Up;
+			Joypad1Down = EssgeeMotionKey.Down;
+			Joypad1Left = EssgeeMotionKey.Left;
+			Joypad1Right = EssgeeMotionKey.Right;
+			Joypad1Button1 = EssgeeMotionKey.A;
+			Joypad1Button2 = EssgeeMotionKey.S;
 
-			Joypad2Up = MotionKey.NumPad8;
-			Joypad2Down = MotionKey.NumPad2;
-			Joypad2Left = MotionKey.NumPad4;
-			Joypad2Right = MotionKey.NumPad6;
-			Joypad2Button1 = MotionKey.NumPad1;
-			Joypad2Button2 = MotionKey.NumPad3;
+			Joypad2Up = EssgeeMotionKey.NumPad8;
+			Joypad2Down = EssgeeMotionKey.NumPad2;
+			Joypad2Left = EssgeeMotionKey.NumPad4;
+			Joypad2Right = EssgeeMotionKey.NumPad6;
+			Joypad2Button1 = EssgeeMotionKey.NumPad1;
+			Joypad2Button2 = EssgeeMotionKey.NumPad3;
 		}
 	}
 }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using System.IO;
-
-using Newtonsoft.Json;
 
 namespace Essgee.Extensions
 {
-	public static class SerializationExtensionMethods
+    public static class SerializationExtensionMethods
 	{
 		public static void SerializeToFile(this object obj, string jsonFileName)
 		{
