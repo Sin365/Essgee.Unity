@@ -25,20 +25,25 @@ public class Essgeeinit : MonoBehaviour
     GameMetadataHandler gameMetadataHandler;
     GameMetadata lastGameMetadata;
     EmulatorHandler emulatorHandler;
+    UEGResources uegResources;
+    UEGLog uegLog;
 
     bool lastUserPauseState;
     (int x, int y, int width, int height) currentViewport;
     double currentPixelAspectRatio;
     byte[] lastFramebufferData;
     (int width, int height) lastFramebufferSize;
-    private UniKeyboard mUniKeyboard;
+    private UEGKeyboard mUniKeyboard;
 
     #endregion
 
     void Awake()
     {
         instance = this;
-        InitAll(Application.streamingAssetsPath, Application.persistentDataPath);
+
+        uegResources = new UEGResources();
+        uegLog = new UEGLog();
+        InitAll(uegResources, Application.persistentDataPath);
         LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
         //LoadAndRunCartridge("G:/SML2.gb");
     }
@@ -56,21 +61,21 @@ public class Essgeeinit : MonoBehaviour
         mUniKeyboard.UpdateInputKey();
     }
 
-    void InitAll(string BaseDataDir, string CustonDataDir)
+    void InitAll(IGameMetaReources metaresources,string CustonDataDir)
     {
         //初始化配置
-        InitAppEnvironment(BaseDataDir, CustonDataDir);
+        InitAppEnvironment(CustonDataDir);
         InitEmu();
         //细节初始化
-        InitializeHandlers();
+        InitializeHandlers(metaresources);
     }
 
-    private void InitAppEnvironment(string BaseDataDir, string CustonDataDir)
+    private void InitAppEnvironment(string CustonDataDir)
     {
-        EssgeeLogger.Init(new UEGLog());
+        EssgeeLogger.Init(uegLog);
 
-        EmuStandInfo.datDirectoryPath = Path.Combine(BaseDataDir, "EssgeeAssets", "No-Intro");
-        EmuStandInfo.metadataDatabaseFilePath = Path.Combine(BaseDataDir, "EssgeeAssets", "MetadataDatabase.json");
+        //EmuStandInfo.datDirectoryPath = Path.Combine(BaseDataDir, "EssgeeAssets", "No-Intro");
+        //EmuStandInfo.metadataDatabaseFilePath = Path.Combine(BaseDataDir, "EssgeeAssets", "MetadataDatabase.json");
 
         EmuStandInfo.jsonConfigFileName = "Config.json";
         EmuStandInfo.saveDataDirectoryName = "Saves";
@@ -119,14 +124,14 @@ public class Essgeeinit : MonoBehaviour
 
     #region 细节初始化
 
-    private void InitializeHandlers()
+    private void InitializeHandlers(IGameMetaReources metaresources)
     {
         InitializeOSDHandler();
         InitializeGraphicsHandler();
         InitializeSoundHandler();
-        InitializeMetadataHandler();
+        InitializeMetadataHandler(metaresources);
 
-        mUniKeyboard = this.gameObject.AddComponent<UniKeyboard>();
+        mUniKeyboard = this.gameObject.AddComponent<UEGKeyboard>();
     }
 
     private void InitializeOSDHandler()
@@ -157,10 +162,10 @@ public class Essgeeinit : MonoBehaviour
         //soundHandler.Startup();
     }
 
-    private void InitializeMetadataHandler()
+    private void InitializeMetadataHandler(IGameMetaReources metaresources)
     {
         //gameMetadataHandler = new GameMetadataHandler(onScreenDisplayHandler);
-        gameMetadataHandler = new GameMetadataHandler();
+        gameMetadataHandler = new GameMetadataHandler(metaresources);
     }
     #endregion
     void Dispose(bool disposing)
@@ -180,6 +185,7 @@ public class Essgeeinit : MonoBehaviour
     #region 配置
     private static void LoadConfiguration()
     {
+        //TODO 暂时跳过这里的配置加载
         //Directory.CreateDirectory(EmuStandInfo.programDataDirectory);
         //if (!File.Exists(EmuStandInfo.programConfigPath) || (EmuStandInfo.Configuration = EmuStandInfo.programConfigPath.DeserializeFromFile<Configuration>()) == null)
         //{

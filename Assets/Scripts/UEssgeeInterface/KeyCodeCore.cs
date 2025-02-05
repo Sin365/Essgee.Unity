@@ -53,7 +53,7 @@ public class KeyCodeCore
     public EssgeeMotionKey[] mCurrKey = new EssgeeMotionKey[0];
     List<EssgeeMotionKey> temp = new List<EssgeeMotionKey>();
     ulong tempInputAllData = 0;
-    UniKeyboard mUniKeyboard;
+    UEGKeyboard mUniKeyboard;
     ulong last_CurryInpuAllData_test = 0;
     public static class EssgeeUnityKey
     {
@@ -109,7 +109,7 @@ public class KeyCodeCore
     {
         //bReplayMode = IsReplay;
     }
-    public void Init(Essgee.Emulation.Machines.IMachine Machine, UniKeyboard uniKeyboard, bool IsReplay)
+    public void Init(Essgee.Emulation.Machines.IMachine Machine, UEGKeyboard uniKeyboard, bool IsReplay)
     {
         mUniKeyboard = uniKeyboard;
         //dictKeyCfgs.Clear();

@@ -1,6 +1,5 @@
 ﻿using Essgee.Emulation;
 using Essgee.Exceptions;
-using Essgee.Extensions;
 using Essgee.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -13,49 +12,82 @@ using System.Xml.Serialization;
 
 namespace Essgee.Metadata
 {
+    /// <summary>
+    /// 单独定义meta加载接口
+    /// </summary>
+    public interface IGameMetaReources
+    {
+        public bool GetCartMetadataDatabase(out string loadedData);
+        public bool GetDatBytes(string DatName,out byte[] loadedData);
+    }
+
     public class GameMetadataHandler
     {
         //static string datDirectoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "No-Intro");
         //static string metadataDatabaseFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "MetadataDatabase.json");
 
-        readonly Dictionary<string, DatFile> datFiles;
+        IGameMetaReources gameMetaReources;
+        //readonly Dictionary<string, DatFile> datFiles;
         readonly List<CartridgeJSON> cartMetadataDatabase;
 
+        //public int NumKnownSystems { get { return datFiles.Count; } }
+        //public int NumKnownGames { get { return datFiles.Sum(x => x.Value.Game.Count()); } }
 
-        public int NumKnownSystems { get { return datFiles.Count; } }
-        public int NumKnownGames { get { return datFiles.Sum(x => x.Value.Game.Count()); } }
-
-        public GameMetadataHandler()
+        public GameMetadataHandler(IGameMetaReources metaresources)
         {
+            gameMetaReources = metaresources;
 
-            XmlRootAttribute root;
-            XmlSerializer serializer;
+            if(!gameMetaReources.GetCartMetadataDatabase(out string loadedData))
+                throw new HandlerException("CartMetadataDatabase file not found");
 
-            /* Read No-Intro .dat files */
-            datFiles = new Dictionary<string, DatFile>();
-            foreach (var file in Directory.EnumerateFiles(EmuStandInfo.datDirectoryPath, "*.dat"))
-            {
-                root = new XmlRootAttribute("datafile") { IsNullable = true };
-                serializer = new XmlSerializer(typeof(DatFile), root);
-                using (FileStream stream = new FileStream(Path.Combine(EmuStandInfo.datDirectoryPath, file), FileMode.Open))
-                {
-                    datFiles.Add(Path.GetFileName(file), (DatFile)serializer.Deserialize(stream));
-                }
-            }
+            cartMetadataDatabase = JsonConvert.DeserializeObject<List<CartridgeJSON>>(loadedData);
 
-            /* Read cartridge metadata database */
-            cartMetadataDatabase = EmuStandInfo.metadataDatabaseFilePath.DeserializeFromFile<List<CartridgeJSON>>();
 
-            EssgeeLogger.EnqueueMessageSuccess($"Metadata initialized; {NumKnownGames} game(s) known across {NumKnownSystems} system(s).");
+            //改为接口直接读取
+            //XmlRootAttribute root;
+            //XmlSerializer serializer;
+
+            ///* Read No-Intro .dat files */
+
+            //datFiles = new Dictionary<string, DatFile>();
+            //foreach (var file in Directory.EnumerateFiles(EmuStandInfo.datDirectoryPath, "*.dat"))
+            //{
+            //    root = new XmlRootAttribute("datafile") { IsNullable = true };
+            //    serializer = new XmlSerializer(typeof(DatFile), root);
+            //    using (FileStream stream = new FileStream(Path.Combine(EmuStandInfo.datDirectoryPath, file), FileMode.Open))
+            //    {
+            //        datFiles.Add(Path.GetFileName(file), (DatFile)serializer.Deserialize(stream));
+            //    }
+            //}
+
+            ///* Read cartridge metadata database */
+            //cartMetadataDatabase = EmuStandInfo.metadataDatabaseFilePath.DeserializeFromFile<List<CartridgeJSON>>();
+
+            ////EssgeeLogger.EnqueueMessageSuccess($"Metadata initialized; {NumKnownGames} game(s) known across {NumKnownSystems} system(s).");
         }
 
         public GameMetadata GetGameMetadata(string datFilename, string romFilename, uint romCrc32, int romSize)
         {
             /* Sanity checks */
-            if (!datFiles.ContainsKey(datFilename)) throw new HandlerException("Requested .dat file not found");
+            //if (!datFiles.ContainsKey(datFilename)) throw new HandlerException("Requested .dat file not found");
+
+            //接口直接读取
+            if (!gameMetaReources.GetDatBytes(datFilename, out byte[] loadedData))
+                throw new HandlerException("Requested .dat file not found");
+
+            DatFile datFile;
+
+            XmlRootAttribute root;
+            XmlSerializer serializer;
+            root = new XmlRootAttribute("datafile") { IsNullable = true };
+            serializer = new XmlSerializer(typeof(DatFile), root);
+            using (MemoryStream stream = new MemoryStream(loadedData))
+            {
+                datFile = (DatFile)serializer.Deserialize(stream);
+            }
 
             /* Get information from No-Intro .dat */
-            var datFile = datFiles[datFilename];
+            //var datFile = datFiles[datFilename];
             var crcString = string.Format("{0:X8}", romCrc32);
             var sizeString = string.Format("{0:D}", romSize);
             var gameInfo = datFile.Game.FirstOrDefault(x => x.Rom.Any(y => y.Crc == crcString && y.Size == sizeString));

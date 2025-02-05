@@ -5,8 +5,8 @@ using System;
 public static class EmuStandInfo
 {
     //À´×ÔmetaData
-    public static string datDirectoryPath;
-    public static string metadataDatabaseFilePath;
+    //public static string datDirectoryPath;
+    //public static string metadataDatabaseFilePath;
 
 
     public static string jsonConfigFileName;//= "Config.json";

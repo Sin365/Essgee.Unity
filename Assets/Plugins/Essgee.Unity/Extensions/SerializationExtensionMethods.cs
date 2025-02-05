@@ -10,7 +10,7 @@ namespace Essgee.Extensions
             SerializeToFile(obj, jsonFileName, new JsonSerializerSettings());
         }
 
-        public static void SerializeToFile(this object obj, string jsonFileName, JsonSerializerSettings serializerSettings)
+        static void SerializeToFile(this object obj, string jsonFileName, JsonSerializerSettings serializerSettings)
         {
             using (var writer = new StreamWriter(jsonFileName))
             {

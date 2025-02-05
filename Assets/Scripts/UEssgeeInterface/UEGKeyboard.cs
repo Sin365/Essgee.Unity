@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UniKeyboard : MonoBehaviour
+public class UEGKeyboard : MonoBehaviour
 {
     public KeyCodeCore mKeyCodeCore = new KeyCodeCore();
     #region
