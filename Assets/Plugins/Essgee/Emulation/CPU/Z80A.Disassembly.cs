@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace Essgee.Emulation.CPU
 {
-	public partial class Z80A
-	{
-		// TODO: add mnemonics for undocumented opcodes
+    public partial class Z80A
+    {
+        // TODO: add mnemonics for undocumented opcodes
 
-		static readonly string[] opcodeMnemonicNoPrefix = new string[]
-		{
-			"NOP",                  "LD BC, 0x{0:X4}",      "LD (BC), A",           "INC BC",               "INC B",                "DEC B",                "LD B, 0x{0:X2}",       "RLCA",                 /* 0x00 */
+        static readonly string[] opcodeMnemonicNoPrefix = new string[]
+        {
+            "NOP",                  "LD BC, 0x{0:X4}",      "LD (BC), A",           "INC BC",               "INC B",                "DEC B",                "LD B, 0x{0:X2}",       "RLCA",                 /* 0x00 */
 			"EX AF, AF'",           "ADD HL, BC",           "LD A, (BC)",           "DEC BC",               "INC C",                "DEC C",                "LD C, 0x{0:X2}",       "RRCA",                 /* 0x08 */
 			"DJNZ 0x{0:X2}",        "LD DE, 0x{0:X4}",      "LD (DE), A",           "INC DE",               "INC D",                "DEC D",                "LD D, 0x{0:X2}",       "RLA",                  /* 0x10 */
 			"JR 0x{0:X2}",          "ADD HL, DE",           "LD A, (DE)",           "DEC DE",               "INC E",                "DEC E",                "LD E, 0x{0:X2}",       "RRA",                  /* 0x18 */
@@ -46,29 +42,29 @@ namespace Essgee.Emulation.CPU
 			"RET M",                "LD SP, HL",            "JP M, 0x{0:X4}",       "EI",                   "CALL M, 0x{0:X4}",     string.Empty,           "CP 0x{0:X2}",          "RST 38"                /* 0xF0 */
 		};
 
-		static readonly int[] opcodeLengthNoPrefix = new int[]
-		{
-			1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
-			2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
-			2, 3, 3, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1,
-			2, 3, 3, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 3, 3, 3, 1, 2, 1, 1, 1, 3, -1, 3, 3, 2, 1,
-			1, 1, 3, 2, 3, 1, 2, 1, 1, 1, 3, 2, 3, -1, 2, 1,
-			1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 3, 1, 3, -1, 2, 1,
-			1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 3, 1, 3, -1, 2, 1,
-		};
+        static readonly int[] opcodeLengthNoPrefix = new int[]
+        {
+            1, 3, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
+            2, 3, 3, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1,
+            2, 3, 3, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 3, 3, 3, 1, 2, 1, 1, 1, 3, -1, 3, 3, 2, 1,
+            1, 1, 3, 2, 3, 1, 2, 1, 1, 1, 3, 2, 3, -1, 2, 1,
+            1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 3, 1, 3, -1, 2, 1,
+            1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 3, 1, 3, -1, 2, 1,
+        };
 
-		static readonly string[] opcodeMnemonicPrefixED = new string[]
-		{
-			".DB 0xED, 0x00",       ".DB 0xED, 0x01",       ".DB 0xED, 0x02",       ".DB 0xED, 0x03",       ".DB 0xED, 0x04",       ".DB 0xED, 0x05",       ".DB 0xED, 0x06",       ".DB 0xED, 0x07",       /* 0x00 */
+        static readonly string[] opcodeMnemonicPrefixED = new string[]
+        {
+            ".DB 0xED, 0x00",       ".DB 0xED, 0x01",       ".DB 0xED, 0x02",       ".DB 0xED, 0x03",       ".DB 0xED, 0x04",       ".DB 0xED, 0x05",       ".DB 0xED, 0x06",       ".DB 0xED, 0x07",       /* 0x00 */
 			".DB 0xED, 0x08",       ".DB 0xED, 0x09",       ".DB 0xED, 0x0A",       ".DB 0xED, 0x0B",       ".DB 0xED, 0x0C",       ".DB 0xED, 0x0D",       ".DB 0xED, 0x0E",       ".DB 0xED, 0x0F",       /* 0x08 */
 			".DB 0xED, 0x10",       ".DB 0xED, 0x11",       ".DB 0xED, 0x12",       ".DB 0xED, 0x13",       ".DB 0xED, 0x14",       ".DB 0xED, 0x15",       ".DB 0xED, 0x16",       ".DB 0xED, 0x17",       /* 0x10 */
 			".DB 0xED, 0x18",       ".DB 0xED, 0x19",       ".DB 0xED, 0x1A",       ".DB 0xED, 0x1B",       ".DB 0xED, 0x1C",       ".DB 0xED, 0x1D",       ".DB 0xED, 0x1E",       ".DB 0xED, 0x1F",       /* 0x18 */
@@ -102,29 +98,29 @@ namespace Essgee.Emulation.CPU
 			".DB 0xED, 0xF8",       ".DB 0xED, 0xF9",       ".DB 0xED, 0xFA",       ".DB 0xED, 0xFB",       ".DB 0xED, 0xFC",       ".DB 0xED, 0xFD",       ".DB 0xED, 0xFE",       ".DB 0xED, 0xFF"        /* 0xF8 */
 		};
 
-		static readonly int[] opcodeLengthPrefixED = new int[]
-		{
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2,
-			2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-		};
+        static readonly int[] opcodeLengthPrefixED = new int[]
+        {
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2,
+            2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        };
 
-		static readonly string[] opcodeMnemonicPrefixCB = new string[]
-		{
-			"RLC B",                "RLC C",                "RLC D",                "RLC E",                "RLC H",                "RLC L",                "RLC (HL)",             "RLC A",                /* 0x00 */
+        static readonly string[] opcodeMnemonicPrefixCB = new string[]
+        {
+            "RLC B",                "RLC C",                "RLC D",                "RLC E",                "RLC H",                "RLC L",                "RLC (HL)",             "RLC A",                /* 0x00 */
 			"RRC B",                "RRC C",                "RRC D",                "RRC E",                "RRC H",                "RRC L",                "RRC (HL)",             "RRC A",                /* 0x08 */
 			"RL B",                 "RL C",                 "RL D",                 "RL E",                 "RL H",                 "RL L",                 "RL (HL)",              "RL A",                 /* 0x10 */
 			"RR B",                 "RR C",                 "RR D",                 "RR E",                 "RR H",                 "RR L",                 "RR (HL)",              "RR A",                 /* 0x18 */
@@ -158,29 +154,29 @@ namespace Essgee.Emulation.CPU
 			"SET 7, B",             "SET 7, C",             "SET 7, D",             "SET 7, E",             "SET 7, H",             "SET 7, L",             "SET 7, (HL)",          "SET 7, A"              /* 0xF8 */
 		};
 
-		static readonly int[] opcodeLength_CB = new int[]
-		{
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-		};
+        static readonly int[] opcodeLength_CB = new int[]
+        {
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        };
 
-		static readonly string[] opcodeMnemonicPrefixDD = new string[]
-		{
-			".DB 0xDD, 0x00",       ".DB 0xDD, 0x01",       ".DB 0xDD, 0x02",       ".DB 0xDD, 0x03",       ".DB 0xDD, 0x04",       ".DB 0xDD, 0x05",       ".DB 0xDD, 0x06",       ".DB 0xDD, 0x07",       /* 0x00 */
+        static readonly string[] opcodeMnemonicPrefixDD = new string[]
+        {
+            ".DB 0xDD, 0x00",       ".DB 0xDD, 0x01",       ".DB 0xDD, 0x02",       ".DB 0xDD, 0x03",       ".DB 0xDD, 0x04",       ".DB 0xDD, 0x05",       ".DB 0xDD, 0x06",       ".DB 0xDD, 0x07",       /* 0x00 */
 			".DB 0xDD, 0x08",       "ADD IX, BC",           ".DB 0xDD, 0x0A",       ".DB 0xDD, 0x0B",       ".DB 0xDD, 0x0C",       ".DB 0xDD, 0x0D",       ".DB 0xDD, 0x0E",       ".DB 0xDD, 0x0F",       /* 0x08 */
 			".DB 0xDD, 0x10",       ".DB 0xDD, 0x11",       ".DB 0xDD, 0x12",       ".DB 0xDD, 0x13",       ".DB 0xDD, 0x14",       ".DB 0xDD, 0x15",       ".DB 0xDD, 0x16",       ".DB 0xDD, 0x17",       /* 0x10 */
 			".DB 0xDD, 0x18",       "ADD IX, DE",           ".DB 0xDD, 0x1A",       ".DB 0xDD, 0x1B",       ".DB 0xDD, 0x1C",       ".DB 0xDD, 0x1D",       ".DB 0xDD, 0x1E",       ".DB 0xDD, 0x1F",       /* 0x18 */
@@ -214,9 +210,9 @@ namespace Essgee.Emulation.CPU
 			".DB 0xFD, 0xF8",       "LD SP, IX",            ".DB 0xFD, 0xFA",       ".DB 0xFD, 0xFB",       ".DB 0xFD, 0xFC",       ".DB 0xFD, 0xFD",       ".DB 0xFD, 0xFE",       ".DB 0xFD, 0xFF"        /* 0xF8 */
 		};
 
-		static readonly string[] opcodeMnemonicPrefixFD = new string[]
-		{
-			".DB 0xFD, 0x00",       ".DB 0xFD, 0x01",       ".DB 0xFD, 0x02",       ".DB 0xFD, 0x03",       ".DB 0xFD, 0x04",       ".DB 0xFD, 0x05",       ".DB 0xFD, 0x06",       ".DB 0xFD, 0x07",       /* 0x00 */
+        static readonly string[] opcodeMnemonicPrefixFD = new string[]
+        {
+            ".DB 0xFD, 0x00",       ".DB 0xFD, 0x01",       ".DB 0xFD, 0x02",       ".DB 0xFD, 0x03",       ".DB 0xFD, 0x04",       ".DB 0xFD, 0x05",       ".DB 0xFD, 0x06",       ".DB 0xFD, 0x07",       /* 0x00 */
 			".DB 0xFD, 0x08",       "ADD IY, BC",           ".DB 0xFD, 0x0A",       ".DB 0xFD, 0x0B",       ".DB 0xFD, 0x0C",       ".DB 0xFD, 0x0D",       ".DB 0xFD, 0x0E",       ".DB 0xFD, 0x0F",       /* 0x08 */
 			".DB 0xFD, 0x10",       ".DB 0xFD, 0x11",       ".DB 0xFD, 0x12",       ".DB 0xFD, 0x13",       ".DB 0xFD, 0x14",       ".DB 0xFD, 0x15",       ".DB 0xFD, 0x16",       ".DB 0xFD, 0x17",       /* 0x10 */
 			".DB 0xFD, 0x18",       "ADD IY, DE",           ".DB 0xFD, 0x1A",       ".DB 0xFD, 0x1B",       ".DB 0xFD, 0x1C",       ".DB 0xFD, 0x1D",       ".DB 0xFD, 0x1E",       ".DB 0xFD, 0x1F",       /* 0x18 */
@@ -250,9 +246,9 @@ namespace Essgee.Emulation.CPU
 			".DB 0xFD, 0xF8",       "LD SP, IY",            ".DB 0xFD, 0xFA",       ".DB 0xFD, 0xFB",       ".DB 0xFD, 0xFC",       ".DB 0xFD, 0xFD",       ".DB 0xFD, 0xFE",       ".DB 0xFD, 0xFF"        /* 0xF8 */
 		};
 
-		static readonly string[] opcodeMnemonicPrefixDDCB = new string[]
-		{
-			".DB 0xDD, 0xCB, 0x00", ".DB 0xDD, 0xCB, 0x01", ".DB 0xDD, 0xCB, 0x02", ".DB 0xDD, 0xCB, 0x03", ".DB 0xDD, 0xCB, 0x04", ".DB 0xDD, 0xCB, 0x05", "RLC (IX+0x{0:X2})",    ".DB 0xDD, 0xCB, 0x07", /* 0x00 */
+        static readonly string[] opcodeMnemonicPrefixDDCB = new string[]
+        {
+            ".DB 0xDD, 0xCB, 0x00", ".DB 0xDD, 0xCB, 0x01", ".DB 0xDD, 0xCB, 0x02", ".DB 0xDD, 0xCB, 0x03", ".DB 0xDD, 0xCB, 0x04", ".DB 0xDD, 0xCB, 0x05", "RLC (IX+0x{0:X2})",    ".DB 0xDD, 0xCB, 0x07", /* 0x00 */
 			".DB 0xDD, 0xCB, 0x08", ".DB 0xDD, 0xCB, 0x09", ".DB 0xDD, 0xCB, 0x0A", ".DB 0xDD, 0xCB, 0x0B", ".DB 0xDD, 0xCB, 0x0C", ".DB 0xDD, 0xCB, 0x0D", "RRC (IX+0x{0:X2})",    ".DB 0xDD, 0xCB, 0x0F", /* 0x08 */
 			".DB 0xDD, 0xCB, 0x10", ".DB 0xDD, 0xCB, 0x11", ".DB 0xDD, 0xCB, 0x12", ".DB 0xDD, 0xCB, 0x13", ".DB 0xDD, 0xCB, 0x14", ".DB 0xDD, 0xCB, 0x15", "RL (IX+0x{0:X2})",     ".DB 0xDD, 0xCB, 0x17", /* 0x10 */
 			".DB 0xDD, 0xCB, 0x18", ".DB 0xDD, 0xCB, 0x19", ".DB 0xDD, 0xCB, 0x1A", ".DB 0xDD, 0xCB, 0x1B", ".DB 0xDD, 0xCB, 0x1C", ".DB 0xDD, 0xCB, 0x1D", "RR (IX+0x{0:X2})",     ".DB 0xDD, 0xCB, 0x1F", /* 0x18 */
@@ -286,9 +282,9 @@ namespace Essgee.Emulation.CPU
 			".DB 0xDD, 0xFB, 0xF8", ".DB 0xDD, 0xFB, 0xF9", ".DB 0xDD, 0xFB, 0xFA", ".DB 0xDD, 0xFB, 0xFB", ".DB 0xDD, 0xFB, 0xFC", ".DB 0xDD, 0xFB, 0xFD", "SET 7, (IX+0x{0:X2})", ".DB 0xDD, 0xFB, 0xFF"  /* 0xF8 */
 		};
 
-		static readonly string[] opcodeMnemonicPrefixFDCB = new string[]
-		{
-			".DB 0xFD, 0xCB, 0x00", ".DB 0xFD, 0xCB, 0x01", ".DB 0xFD, 0xCB, 0x02", ".DB 0xFD, 0xCB, 0x03", ".DB 0xFD, 0xCB, 0x04", ".DB 0xFD, 0xCB, 0x05", "RLC (IX+0x{0:X2})",    ".DB 0xFD, 0xCB, 0x07", /* 0x00 */
+        static readonly string[] opcodeMnemonicPrefixFDCB = new string[]
+        {
+            ".DB 0xFD, 0xCB, 0x00", ".DB 0xFD, 0xCB, 0x01", ".DB 0xFD, 0xCB, 0x02", ".DB 0xFD, 0xCB, 0x03", ".DB 0xFD, 0xCB, 0x04", ".DB 0xFD, 0xCB, 0x05", "RLC (IX+0x{0:X2})",    ".DB 0xFD, 0xCB, 0x07", /* 0x00 */
 			".DB 0xFD, 0xCB, 0x08", ".DB 0xFD, 0xCB, 0x09", ".DB 0xFD, 0xCB, 0x0A", ".DB 0xFD, 0xCB, 0x0B", ".DB 0xFD, 0xCB, 0x0C", ".DB 0xFD, 0xCB, 0x0D", "RRC (IX+0x{0:X2})",    ".DB 0xFD, 0xCB, 0x0F", /* 0x08 */
 			".DB 0xFD, 0xCB, 0x10", ".DB 0xFD, 0xCB, 0x11", ".DB 0xFD, 0xCB, 0x12", ".DB 0xFD, 0xCB, 0x13", ".DB 0xFD, 0xCB, 0x14", ".DB 0xFD, 0xCB, 0x15", "RL (IX+0x{0:X2})",     ".DB 0xFD, 0xCB, 0x17", /* 0x10 */
 			".DB 0xFD, 0xCB, 0x18", ".DB 0xFD, 0xCB, 0x19", ".DB 0xFD, 0xCB, 0x1A", ".DB 0xFD, 0xCB, 0x1B", ".DB 0xFD, 0xCB, 0x1C", ".DB 0xFD, 0xCB, 0x1D", "RR (IX+0x{0:X2})",     ".DB 0xFD, 0xCB, 0x1F", /* 0x18 */
@@ -322,168 +318,168 @@ namespace Essgee.Emulation.CPU
 			".DB 0xFD, 0xFB, 0xF8", ".DB 0xFD, 0xFB, 0xF9", ".DB 0xFD, 0xFB, 0xFA", ".DB 0xFD, 0xFB, 0xFB", ".DB 0xFD, 0xFB, 0xFC", ".DB 0xFD, 0xFB, 0xFD", "SET 7, (IX+0x{0:X2})", ".DB 0xFD, 0xFB, 0xFF"  /* 0xF8 */
 		};
 
-		static readonly int[] opcodeLengthPrefixDDFD = new int[]
-		{
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 3, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-			2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-			2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-			3, 3, 3, 3, 3, 3, 2, 3, 2, 2, 2, 2, 2, 2, 3, 2,
-			2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-			2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-			2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-			2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, -1, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-		};
+        static readonly int[] opcodeLengthPrefixDDFD = new int[]
+        {
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 3, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            3, 3, 3, 3, 3, 3, 2, 3, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, -1, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        };
 
-		static readonly int[] opcodeLengthPrefixDDFDCB = new int[]
-		{
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-			4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-		};
+        static readonly int[] opcodeLengthPrefixDDFDCB = new int[]
+        {
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+        };
 
-		public static string PrintRegisters(Z80A cpu)
-		{
-			return string.Format("AF:{0:X4} BC:{1:X4} DE:{2:X4} HL:{3:X4} IX:{4:X4} IY:{5:X4} SP:{6:X4}", cpu.af.Word, cpu.bc.Word, cpu.de.Word, cpu.hl.Word, cpu.ix.Word, cpu.iy.Word, cpu.sp);
-		}
+        public static string PrintRegisters(Z80A cpu)
+        {
+            return string.Format("AF:{0:X4} BC:{1:X4} DE:{2:X4} HL:{3:X4} IX:{4:X4} IY:{5:X4} SP:{6:X4}", cpu.af.Word, cpu.bc.Word, cpu.de.Word, cpu.hl.Word, cpu.ix.Word, cpu.iy.Word, cpu.sp);
+        }
 
-		public static string PrintFlags(Z80A cpu)
-		{
-			return string.Format("[{7}{6}{5}{4}{3}{2}{1}{0}]",
-				cpu.IsFlagSet(Flags.Carry) ? "C" : "-",
-				cpu.IsFlagSet(Flags.Subtract) ? "N" : "-",
-				cpu.IsFlagSet(Flags.ParityOrOverflow) ? "P" : "-",
-				cpu.IsFlagSet(Flags.UnusedBitX) ? "X" : "-",
-				cpu.IsFlagSet(Flags.HalfCarry) ? "H" : "-",
-				cpu.IsFlagSet(Flags.UnusedBitY) ? "Y" : "-",
-				cpu.IsFlagSet(Flags.Zero) ? "Z" : "-",
-				cpu.IsFlagSet(Flags.Sign) ? "S" : "-");
-		}
+        public static string PrintFlags(Z80A cpu)
+        {
+            return string.Format("[{7}{6}{5}{4}{3}{2}{1}{0}]",
+                cpu.IsFlagSet(Flags.Carry) ? "C" : "-",
+                cpu.IsFlagSet(Flags.Subtract) ? "N" : "-",
+                cpu.IsFlagSet(Flags.ParityOrOverflow) ? "P" : "-",
+                cpu.IsFlagSet(Flags.UnusedBitX) ? "X" : "-",
+                cpu.IsFlagSet(Flags.HalfCarry) ? "H" : "-",
+                cpu.IsFlagSet(Flags.UnusedBitY) ? "Y" : "-",
+                cpu.IsFlagSet(Flags.Zero) ? "Z" : "-",
+                cpu.IsFlagSet(Flags.Sign) ? "S" : "-");
+        }
 
-		public static string PrintInterrupt(Z80A cpu)
-		{
-			return string.Format("[IM{0} {1} {2} {3}]", cpu.im, (cpu.iff1 ? "EI" : "DI"), (cpu.halt ? "HLT" : "---"), (cpu.intState == InterruptState.Assert ? "ASR" : "---"));
-		}
+        public static string PrintInterrupt(Z80A cpu)
+        {
+            return string.Format("[IM{0} {1} {2} {3}]", cpu.im, (cpu.iff1 ? "EI" : "DI"), (cpu.halt ? "HLT" : "---"), (cpu.intState == InterruptState.Assert ? "ASR" : "---"));
+        }
 
-		public static string DisassembleOpcode(Z80A cpu, ushort address)
-		{
-			byte[] opcode = DisassembleGetOpcodeBytes(cpu, address);
-			return string.Format("0x{0:X4} | {1} | {2}", address, DisassembleMakeByteString(cpu, opcode).PadRight(15), DisassembleMakeMnemonicString(cpu, opcode));
-		}
+        public static string DisassembleOpcode(Z80A cpu, ushort address)
+        {
+            byte[] opcode = DisassembleGetOpcodeBytes(cpu, address);
+            return string.Format("0x{0:X4} | {1} | {2}", address, DisassembleMakeByteString(cpu, opcode).PadRight(15), DisassembleMakeMnemonicString(cpu, opcode));
+        }
 
-		public static byte[] DisassembleGetOpcodeBytes(Z80A cpu, ushort address)
-		{
-			byte[] opcode = new byte[5];
-			for (int i = 0; i < opcode.Length; i++)
-				opcode[i] = (address + i <= 0xFFFF ? cpu.ReadMemory8((ushort)(address + i)) : (byte)0);
-			return opcode;
-		}
+        public static byte[] DisassembleGetOpcodeBytes(Z80A cpu, ushort address)
+        {
+            byte[] opcode = new byte[5];
+            for (int i = 0; i < opcode.Length; i++)
+                opcode[i] = (address + i <= 0xFFFF ? cpu.ReadMemory8((ushort)(address + i)) : (byte)0);
+            return opcode;
+        }
 
-		public static int DisassembleGetOpcodeLen(Z80A cpu, byte[] opcode)
-		{
-			switch (opcode[0])
-			{
-				case 0xCB: return opcodeLength_CB[opcode[1]];
-				case 0xED: return opcodeLengthPrefixED[opcode[1]];
+        public static int DisassembleGetOpcodeLen(Z80A cpu, byte[] opcode)
+        {
+            switch (opcode[0])
+            {
+                case 0xCB: return opcodeLength_CB[opcode[1]];
+                case 0xED: return opcodeLengthPrefixED[opcode[1]];
 
-				case 0xDD:
-				case 0xFD:
-					if (opcode[1] == 0xCB)
-						return opcodeLengthPrefixDDFDCB[opcode[3]];
-					else
-						return opcodeLengthPrefixDDFD[opcode[1]];
+                case 0xDD:
+                case 0xFD:
+                    if (opcode[1] == 0xCB)
+                        return opcodeLengthPrefixDDFDCB[opcode[3]];
+                    else
+                        return opcodeLengthPrefixDDFD[opcode[1]];
 
-				default: return opcodeLengthNoPrefix[opcode[0]];
-			}
-		}
+                default: return opcodeLengthNoPrefix[opcode[0]];
+            }
+        }
 
-		public static string DisassembleMakeByteString(Z80A cpu, byte[] opcode)
-		{
-			return string.Join(" ", opcode.Select(x => string.Format("{0:X2}", x)).Take(DisassembleGetOpcodeLen(cpu, opcode)));
-		}
+        public static string DisassembleMakeByteString(Z80A cpu, byte[] opcode)
+        {
+            return string.Join(" ", opcode.Select(x => string.Format("{0:X2}", x)).Take(DisassembleGetOpcodeLen(cpu, opcode)));
+        }
 
-		public static string DisassembleMakeMnemonicString(Z80A cpu, byte[] opcode)
-		{
-			int len = DisassembleGetOpcodeLen(cpu, opcode);
+        public static string DisassembleMakeMnemonicString(Z80A cpu, byte[] opcode)
+        {
+            int len = DisassembleGetOpcodeLen(cpu, opcode);
 
-			int start = 0;
-			string[] mnemonics = opcodeMnemonicNoPrefix;
-			bool isDDFDCB = false;
+            int start = 0;
+            string[] mnemonics = opcodeMnemonicNoPrefix;
+            bool isDDFDCB = false;
 
-			switch (opcode[0])
-			{
-				case 0xCB: start = 1; mnemonics = opcodeMnemonicPrefixCB; break;
-				case 0xED: start = 1; mnemonics = opcodeMnemonicPrefixED; break;
+            switch (opcode[0])
+            {
+                case 0xCB: start = 1; mnemonics = opcodeMnemonicPrefixCB; break;
+                case 0xED: start = 1; mnemonics = opcodeMnemonicPrefixED; break;
 
-				case 0xDD:
-					if (opcode[1] == 0xCB)
-					{
-						mnemonics = opcodeMnemonicPrefixDDCB;
-						isDDFDCB = true;
-					}
-					else
-					{
-						start = 1;
-						mnemonics = opcodeMnemonicPrefixDD;
-					}
-					break;
+                case 0xDD:
+                    if (opcode[1] == 0xCB)
+                    {
+                        mnemonics = opcodeMnemonicPrefixDDCB;
+                        isDDFDCB = true;
+                    }
+                    else
+                    {
+                        start = 1;
+                        mnemonics = opcodeMnemonicPrefixDD;
+                    }
+                    break;
 
-				case 0xFD:
-					if (opcode[1] == 0xCB)
-					{
-						mnemonics = opcodeMnemonicPrefixFDCB;
-						isDDFDCB = true;
-					}
-					else
-					{
-						start = 1;
-						mnemonics = opcodeMnemonicPrefixFD;
-					}
-					break;
-			}
+                case 0xFD:
+                    if (opcode[1] == 0xCB)
+                    {
+                        mnemonics = opcodeMnemonicPrefixFDCB;
+                        isDDFDCB = true;
+                    }
+                    else
+                    {
+                        start = 1;
+                        mnemonics = opcodeMnemonicPrefixFD;
+                    }
+                    break;
+            }
 
-			if (mnemonics == null) return "(unimplemented)";
+            if (mnemonics == null) return "(unimplemented)";
 
-			if (!isDDFDCB)
-			{
-				switch (len - start)
-				{
-					case 1: return mnemonics[opcode[start]];
-					case 2: return string.Format(mnemonics[opcode[start]], opcode[start + 1]);
-					case 3: return string.Format(mnemonics[opcode[start]], (opcode[start + 2] << 8 | opcode[start + 1]));
-					default: return string.Empty;
-				}
-			}
-			else
-			{
-				return string.Format(mnemonics[opcode[3]], opcode[2]);
-			}
-		}
+            if (!isDDFDCB)
+            {
+                switch (len - start)
+                {
+                    case 1: return mnemonics[opcode[start]];
+                    case 2: return string.Format(mnemonics[opcode[start]], opcode[start + 1]);
+                    case 3: return string.Format(mnemonics[opcode[start]], (opcode[start + 2] << 8 | opcode[start + 1]));
+                    default: return string.Empty;
+                }
+            }
+            else
+            {
+                return string.Format(mnemonics[opcode[3]], opcode[2]);
+            }
+        }
 
-		private string MakeUnimplementedOpcodeString(string prefix, ushort address)
-		{
-			byte[] opcode = DisassembleGetOpcodeBytes(this, address);
-			return string.Format("Unimplemented {0}opcode {1} ({2})", (prefix != string.Empty ? prefix + " " : prefix), DisassembleMakeByteString(this, opcode), DisassembleMakeMnemonicString(this, opcode));
-		}
-	}
+        private string MakeUnimplementedOpcodeString(string prefix, ushort address)
+        {
+            byte[] opcode = DisassembleGetOpcodeBytes(this, address);
+            return string.Format("Unimplemented {0}opcode {1} ({2})", (prefix != string.Empty ? prefix + " " : prefix), DisassembleMakeByteString(this, opcode), DisassembleMakeMnemonicString(this, opcode));
+        }
+    }
 }

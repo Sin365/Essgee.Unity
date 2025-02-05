@@ -3,9 +3,9 @@
 namespace Essgee.EventArguments
 {
     public class SizeScreenEventArgs : EventArgs
-	{
-		public int Width { get; private set; }
-		public int Height { get; private set; }
+    {
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         public static SizeScreenEventArgs Create(int width, int height)
         {

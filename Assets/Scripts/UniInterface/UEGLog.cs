@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class UEGLog : IEssgeeLogger
 {
     public void Debug(string message)

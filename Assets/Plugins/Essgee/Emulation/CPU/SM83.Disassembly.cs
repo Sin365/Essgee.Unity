@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace Essgee.Emulation.CPU
 {
-	public partial class SM83
-	{
-		static readonly string[] opcodeMnemonicNoPrefix =
-		{
+    public partial class SM83
+    {
+        static readonly string[] opcodeMnemonicNoPrefix =
+        {
 		/*  +00                         +01                         +02                         +03                         +04                         +05                         +06                         +07                         */
 			"NOP",                      "LD BC, 0x{0:X4}",          "LD (BC), A",               "INC BC",                   "INC B",                    "DEC B",                    "LD B, 0x{0:X2}",           "RLCA",                     /* 0x00 */
 			"LD (0x{0:X4}), SP",        "ADD HL, BC",               "LD A, (BC)",               "DEC BC",                   "INC C",                    "DEC C",                    "LD C, 0x{0:X2}",           "RRCA",                     /* 0x08 */
@@ -45,28 +41,28 @@ namespace Essgee.Emulation.CPU
 			"LD HL, SP+0x{0:X2}",       "LD SP, HL",                "LD A, (0x{0:X4})",         "EI",                       ".DB 0xFC",                 ".DB 0xFD",                 "CP 0x{0:X2}",              "RST 38"                    /* 0xF8 */
 		};
 
-		static readonly int[] opcodeLengthNoPrefix =
-		{
-			1, 3, 1, 1, 1, 1, 2, 1, 3, 1, 1, 1, 1, 1, 2, 1,
-			2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
-			2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
-			2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 3, 3, 3, 1, 2, 1, 1, 1, 3, 2, 3, 3, 2, 1,
-			1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 3, 1, 3, 1, 2, 1,
-			2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1,
-			2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1
-		};
+        static readonly int[] opcodeLengthNoPrefix =
+        {
+            1, 3, 1, 1, 1, 1, 2, 1, 3, 1, 1, 1, 1, 1, 2, 1,
+            2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
+            2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
+            2, 3, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 3, 3, 3, 1, 2, 1, 1, 1, 3, 2, 3, 3, 2, 1,
+            1, 1, 3, 1, 3, 1, 2, 1, 1, 1, 3, 1, 3, 1, 2, 1,
+            2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1,
+            2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 3, 1, 1, 1, 2, 1
+        };
 
-		static readonly string[] opcodeMnemonicPrefixCB = new string[]
-		{
+        static readonly string[] opcodeMnemonicPrefixCB = new string[]
+        {
 		/*  +00                         +01                         +02                         +03                         +04                         +05                         +06                         +07                         */
 			"RLC B",                    "RLC C",                    "RLC D",                    "RLC E",                    "RLC H",                    "RLC L",                    "RLC (HL)",                 "RLC A",                    /* 0x00 */
 			"RRC B",                    "RRC C",                    "RRC D",                    "RRC E",                    "RRC H",                    "RRC L",                    "RRC (HL)",                 "RRC A",                    /* 0x08 */
@@ -102,104 +98,104 @@ namespace Essgee.Emulation.CPU
 			"SET 7, B",                 "SET 7, C",                 "SET 7, D",                 "SET 7, E",                 "SET 7, H",                 "SET 7, L",                 "SET 7, (HL)",              "SET 7, A"                  /* 0xF8 */
 		};
 
-		static readonly int[] opcodeLengthPrefixCB = new int[]
-		{
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-		};
+        static readonly int[] opcodeLengthPrefixCB = new int[]
+        {
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        };
 
-		public static string PrintRegisters(SM83 cpu)
-		{
-			return $"AF:{cpu.af.Word:X4} BC:{cpu.bc.Word:X4} DE:{cpu.de.Word:X4} HL:{cpu.hl.Word:X4} SP:{cpu.sp:X4}";
-		}
+        public static string PrintRegisters(SM83 cpu)
+        {
+            return $"AF:{cpu.af.Word:X4} BC:{cpu.bc.Word:X4} DE:{cpu.de.Word:X4} HL:{cpu.hl.Word:X4} SP:{cpu.sp:X4}";
+        }
 
-		public static string PrintFlags(SM83 cpu)
-		{
-			return $"{(cpu.IsFlagSet(Flags.Zero) ? "Z" : "-")}{(cpu.IsFlagSet(Flags.Subtract) ? "N" : "-")}{(cpu.IsFlagSet(Flags.HalfCarry) ? "H" : "-")}{(cpu.IsFlagSet(Flags.Carry) ? "C" : "-")}";
-		}
+        public static string PrintFlags(SM83 cpu)
+        {
+            return $"{(cpu.IsFlagSet(Flags.Zero) ? "Z" : "-")}{(cpu.IsFlagSet(Flags.Subtract) ? "N" : "-")}{(cpu.IsFlagSet(Flags.HalfCarry) ? "H" : "-")}{(cpu.IsFlagSet(Flags.Carry) ? "C" : "-")}";
+        }
 
-		public static string PrintInterrupt(SM83 cpu)
-		{
-			var intFlags = (InterruptSource)cpu.memoryReadDelegate(0xFF0F);
-			var intEnable = (InterruptSource)cpu.memoryReadDelegate(0xFFFF);
+        public static string PrintInterrupt(SM83 cpu)
+        {
+            var intFlags = (InterruptSource)cpu.memoryReadDelegate(0xFF0F);
+            var intEnable = (InterruptSource)cpu.memoryReadDelegate(0xFFFF);
 
-			var intFlagsString =
-				$"{((intFlags & InterruptSource.VBlank) != 0 ? "V" : "-")}" +
-				$"{((intFlags & InterruptSource.LCDCStatus) != 0 ? "L" : "-")}" +
-				$"{((intFlags & InterruptSource.TimerOverflow) != 0 ? "T" : "-")}" +
-				$"{((intFlags & InterruptSource.SerialIO) != 0 ? "S" : "-")}" +
-				$"{((intFlags & InterruptSource.Keypad) != 0 ? "K" : "-")}";
+            var intFlagsString =
+                $"{((intFlags & InterruptSource.VBlank) != 0 ? "V" : "-")}" +
+                $"{((intFlags & InterruptSource.LCDCStatus) != 0 ? "L" : "-")}" +
+                $"{((intFlags & InterruptSource.TimerOverflow) != 0 ? "T" : "-")}" +
+                $"{((intFlags & InterruptSource.SerialIO) != 0 ? "S" : "-")}" +
+                $"{((intFlags & InterruptSource.Keypad) != 0 ? "K" : "-")}";
 
-			var intEnableString =
-				$"{((intEnable & InterruptSource.VBlank) != 0 ? "V" : "-")}" +
-				$"{((intEnable & InterruptSource.LCDCStatus) != 0 ? "L" : "-")}" +
-				$"{((intEnable & InterruptSource.TimerOverflow) != 0 ? "T" : "-")}" +
-				$"{((intEnable & InterruptSource.SerialIO) != 0 ? "S" : "-")}" +
-				$"{((intEnable & InterruptSource.Keypad) != 0 ? "K" : "-")}";
+            var intEnableString =
+                $"{((intEnable & InterruptSource.VBlank) != 0 ? "V" : "-")}" +
+                $"{((intEnable & InterruptSource.LCDCStatus) != 0 ? "L" : "-")}" +
+                $"{((intEnable & InterruptSource.TimerOverflow) != 0 ? "T" : "-")}" +
+                $"{((intEnable & InterruptSource.SerialIO) != 0 ? "S" : "-")}" +
+                $"{((intEnable & InterruptSource.Keypad) != 0 ? "K" : "-")}";
 
-			return $"IME:{(cpu.ime ? "1" : "0")} IF:{intFlagsString} IE:{intEnableString}";
-		}
+            return $"IME:{(cpu.ime ? "1" : "0")} IF:{intFlagsString} IE:{intEnableString}";
+        }
 
-		public static string DisassembleOpcode(SM83 cpu, ushort address)
-		{
-			var opcode = DisassembleGetOpcodeBytes(cpu, address);
-			return $"0x{address:X4} | {DisassembleMakeByteString(cpu, opcode).PadRight(15)} | {DisassembleMakeMnemonicString(cpu, opcode)}";
-		}
+        public static string DisassembleOpcode(SM83 cpu, ushort address)
+        {
+            var opcode = DisassembleGetOpcodeBytes(cpu, address);
+            return $"0x{address:X4} | {DisassembleMakeByteString(cpu, opcode).PadRight(15)} | {DisassembleMakeMnemonicString(cpu, opcode)}";
+        }
 
-		public static byte[] DisassembleGetOpcodeBytes(SM83 cpu, ushort address)
-		{
-			var opcode = new byte[3];
-			for (int i = 0; i < opcode.Length; i++)
-				opcode[i] = address + i <= 0xFFFF ? cpu.memoryReadDelegate((ushort)(address + i)) : (byte)0;
-			return opcode;
-		}
+        public static byte[] DisassembleGetOpcodeBytes(SM83 cpu, ushort address)
+        {
+            var opcode = new byte[3];
+            for (int i = 0; i < opcode.Length; i++)
+                opcode[i] = address + i <= 0xFFFF ? cpu.memoryReadDelegate((ushort)(address + i)) : (byte)0;
+            return opcode;
+        }
 
-		public static int DisassembleGetOpcodeLen(SM83 cpu, byte[] opcode)
-		{
-			if (opcode[0] == 0xCB)
-				return opcodeLengthPrefixCB[opcode[1]];
-			else
-				return opcodeLengthNoPrefix[opcode[0]];
-		}
+        public static int DisassembleGetOpcodeLen(SM83 cpu, byte[] opcode)
+        {
+            if (opcode[0] == 0xCB)
+                return opcodeLengthPrefixCB[opcode[1]];
+            else
+                return opcodeLengthNoPrefix[opcode[0]];
+        }
 
-		public static string DisassembleMakeByteString(SM83 cpu, byte[] opcode)
-		{
-			return string.Join(" ", opcode.Select(x => $"{x:X2}").Take(DisassembleGetOpcodeLen(cpu, opcode)));
-		}
+        public static string DisassembleMakeByteString(SM83 cpu, byte[] opcode)
+        {
+            return string.Join(" ", opcode.Select(x => $"{x:X2}").Take(DisassembleGetOpcodeLen(cpu, opcode)));
+        }
 
-		public static string DisassembleMakeMnemonicString(SM83 cpu, byte[] opcode)
-		{
-			var len = DisassembleGetOpcodeLen(cpu, opcode);
-			var start = opcode[0] == 0xCB ? 1 : 0;
-			var mnemonics = opcode[0] == 0xCB ? opcodeMnemonicPrefixCB : opcodeMnemonicNoPrefix;
+        public static string DisassembleMakeMnemonicString(SM83 cpu, byte[] opcode)
+        {
+            var len = DisassembleGetOpcodeLen(cpu, opcode);
+            var start = opcode[0] == 0xCB ? 1 : 0;
+            var mnemonics = opcode[0] == 0xCB ? opcodeMnemonicPrefixCB : opcodeMnemonicNoPrefix;
 
-			switch (len - start)
-			{
-				case 1: return mnemonics[opcode[start]];
-				case 2: return string.Format(mnemonics[opcode[start]], opcode[start + 1]);
-				case 3: return string.Format(mnemonics[opcode[start]], (opcode[start + 2] << 8 | opcode[start + 1]));
-				default: return string.Empty;
-			}
-		}
+            switch (len - start)
+            {
+                case 1: return mnemonics[opcode[start]];
+                case 2: return string.Format(mnemonics[opcode[start]], opcode[start + 1]);
+                case 3: return string.Format(mnemonics[opcode[start]], (opcode[start + 2] << 8 | opcode[start + 1]));
+                default: return string.Empty;
+            }
+        }
 
-		private string MakeUnimplementedOpcodeString(string prefix, ushort address)
-		{
-			var opcode = DisassembleGetOpcodeBytes(this, address);
-			return $"Unimplemented {(prefix != string.Empty ? prefix + " " : prefix)}opcode {DisassembleMakeByteString(this, opcode)} ({DisassembleMakeMnemonicString(this, opcode)})";
-		}
-	}
+        private string MakeUnimplementedOpcodeString(string prefix, ushort address)
+        {
+            var opcode = DisassembleGetOpcodeBytes(this, address);
+            return $"Unimplemented {(prefix != string.Empty ? prefix + " " : prefix)}opcode {DisassembleMakeByteString(this, opcode)} ({DisassembleMakeMnemonicString(this, opcode)})";
+        }
+    }
 }

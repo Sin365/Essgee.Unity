@@ -39,8 +39,8 @@ public class Essgeeinit : MonoBehaviour
     {
         instance = this;
         InitAll(Application.streamingAssetsPath, Application.persistentDataPath);
-        //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
-        LoadAndRunCartridge("G:/SML2.gb");
+        LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
+        //LoadAndRunCartridge("G:/SML2.gb");
     }
 
     void OnDisable()
@@ -180,13 +180,15 @@ public class Essgeeinit : MonoBehaviour
     #region ≈‰÷√
     private static void LoadConfiguration()
     {
-        Directory.CreateDirectory(EmuStandInfo.programDataDirectory);
+        //Directory.CreateDirectory(EmuStandInfo.programDataDirectory);
+        //if (!File.Exists(EmuStandInfo.programConfigPath) || (EmuStandInfo.Configuration = EmuStandInfo.programConfigPath.DeserializeFromFile<Configuration>()) == null)
+        //{
+        //    EmuStandInfo.Configuration = new Configuration();
+        //    EmuStandInfo.Configuration.SerializeToFile(EmuStandInfo.programConfigPath);
+        //}
 
-        if (!File.Exists(EmuStandInfo.programConfigPath) || (EmuStandInfo.Configuration = EmuStandInfo.programConfigPath.DeserializeFromFile<Configuration>()) == null)
-        {
-            EmuStandInfo.Configuration = new Configuration();
-            EmuStandInfo.Configuration.SerializeToFile(EmuStandInfo.programConfigPath);
-        }
+        EmuStandInfo.Configuration = new Configuration();
+
         List<Type> machineType = new List<Type>();
         machineType.Add(typeof(GameBoy));
         machineType.Add(typeof(GameBoyColor));

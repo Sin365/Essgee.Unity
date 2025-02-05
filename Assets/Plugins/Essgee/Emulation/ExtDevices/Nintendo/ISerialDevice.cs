@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Essgee.EventArguments;
+﻿using Essgee.EventArguments;
+using System;
 
 namespace Essgee.Emulation.ExtDevices.Nintendo
 {
-	public interface ISerialDevice
-	{
-		event EventHandler<SaveExtraDataEventArgs> SaveExtraData;
+    public interface ISerialDevice
+    {
+        event EventHandler<SaveExtraDataEventArgs> SaveExtraData;
 
-		void Initialize();
-		void Shutdown();
+        void Initialize();
+        void Shutdown();
 
-		byte ExchangeBit(int left, byte data);
-	}
+        byte ExchangeBit(int left, byte data);
+    }
 }

@@ -3,11 +3,11 @@
 namespace Essgee.EventArguments
 {
     public class SaveExtraDataEventArgs : EventArgs
-	{
-		public ExtraDataTypes DataType { get; private set; }
-		public ExtraDataOptions Options { get; private set; }
-		public string Description { get; private set; }
-		public object Data { get; private set; }
+    {
+        public ExtraDataTypes DataType { get; private set; }
+        public ExtraDataOptions Options { get; private set; }
+        public string Description { get; private set; }
+        public object Data { get; private set; }
 
         public static SaveExtraDataEventArgs Create(ExtraDataTypes type, ExtraDataOptions option, string desc, object data)
         {

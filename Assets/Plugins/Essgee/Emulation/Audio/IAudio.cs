@@ -1,31 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Essgee.EventArguments;
+﻿using Essgee.EventArguments;
+using System;
 
 namespace Essgee.Emulation.Audio
 {
-	interface IAudio
-	{
-		event EventHandler<EnqueueSamplesEventArgs> EnqueueSamples;
-		void OnEnqueueSamples(EnqueueSamplesEventArgs e);
+    interface IAudio
+    {
+        event EventHandler<EnqueueSamplesEventArgs> EnqueueSamples;
+        void OnEnqueueSamples(EnqueueSamplesEventArgs e);
 
-		(string Name, string Description)[] RuntimeOptions { get; }
+        (string Name, string Description)[] RuntimeOptions { get; }
 
-		object GetRuntimeOption(string name);
-		void SetRuntimeOption(string name, object value);
+        object GetRuntimeOption(string name);
+        void SetRuntimeOption(string name, object value);
 
-		void Startup();
-		void Shutdown();
-		void Reset();
-		void Step(int clockCyclesInStep);
+        void Startup();
+        void Shutdown();
+        void Reset();
+        void Step(int clockCyclesInStep);
 
-		void SetSampleRate(int rate);
-		void SetOutputChannels(int channels);
-		void SetClockRate(double clock);
-		void SetRefreshRate(double refresh);
-	}
+        void SetSampleRate(int rate);
+        void SetOutputChannels(int channels);
+        void SetClockRate(double clock);
+        void SetRefreshRate(double refresh);
+    }
 }

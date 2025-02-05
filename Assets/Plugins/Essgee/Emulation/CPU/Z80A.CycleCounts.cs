@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Essgee.Emulation.CPU
+﻿namespace Essgee.Emulation.CPU
 {
-	public partial class Z80A
-	{
-		public static class CycleCounts
-		{
-			public const int AdditionalJumpCond8Taken = 5;
-			public const int AdditionalRetCondTaken = 6;
-			public const int AdditionalCallCondTaken = 7;
-			public const int AdditionalRepeatByteOps = 5;
-			public const int AdditionalDDFDOps = 4;
-			public const int AdditionalDDFDCBOps = 8;
+    public partial class Z80A
+    {
+        public static class CycleCounts
+        {
+            public const int AdditionalJumpCond8Taken = 5;
+            public const int AdditionalRetCondTaken = 6;
+            public const int AdditionalCallCondTaken = 7;
+            public const int AdditionalRepeatByteOps = 5;
+            public const int AdditionalDDFDOps = 4;
+            public const int AdditionalDDFDCBOps = 8;
 
-			public static readonly int[] NoPrefix = new int[]
-			{
-				4,  10, 7,  6,  4,  4,  7,  4,      4,  11, 7,  6,  4,  4,  7,  4,  /* 0x00 - 0x0F */
+            public static readonly int[] NoPrefix = new int[]
+            {
+                4,  10, 7,  6,  4,  4,  7,  4,      4,  11, 7,  6,  4,  4,  7,  4,  /* 0x00 - 0x0F */
 				8,  10, 7,  6,  4,  4,  7,  4,      12, 11, 7,  6,  4,  4,  7,  4,  /* 0x10 - 0x1F */
 				7,  10, 16, 6,  4,  4,  7,  4,      7,  11, 16, 6,  4,  4,  4,  4,  /* 0x20 - 0x2F */
 				7,  10, 13, 6,  11, 11, 10, 4,      7,  11, 13, 6,  4,  4,  7,  4,  /* 0x30 - 0x3F */
@@ -37,9 +31,9 @@ namespace Essgee.Emulation.CPU
 				5,  10, 10, 4,  10, 11, 7,  11,     5,  6,  10, 4,  10, 0,  7,  11  /* 0xF0 - 0xFF */
 			};
 
-			public static readonly int[] PrefixED = new int[]
-			{
-				8,  8,  8,  8,  8,  8,  8,  8,      8,  8,  8,  8,  8,  8,  8,  8,  /* 0x00 - 0x0F */
+            public static readonly int[] PrefixED = new int[]
+            {
+                8,  8,  8,  8,  8,  8,  8,  8,      8,  8,  8,  8,  8,  8,  8,  8,  /* 0x00 - 0x0F */
 				8,  8,  8,  8,  8,  8,  8,  8,      8,  8,  8,  8,  8,  8,  8,  8,  /* 0x10 - 0x1F */
 				8,  8,  8,  8,  8,  8,  8,  8,      8,  8,  8,  8,  8,  8,  8,  8,  /* 0x20 - 0x2F */
 				8,  8,  8,  8,  8,  8,  8,  8,      8,  8,  8,  8,  8,  8,  8,  8,  /* 0x30 - 0x3F */
@@ -57,9 +51,9 @@ namespace Essgee.Emulation.CPU
 				8,  8,  8,  8,  8,  8,  8,  8,      8,  8,  8,  8,  8,  8,  8,  8   /* 0xF0 - 0xFF */
 			};
 
-			public static readonly int[] PrefixCB = new int[]
-			{
-				8,  8,  8,  8,  8,  8,  15, 8,      8,  8,  8,  8,  8,  8,  15, 8,  /* 0x00 - 0x0F */
+            public static readonly int[] PrefixCB = new int[]
+            {
+                8,  8,  8,  8,  8,  8,  15, 8,      8,  8,  8,  8,  8,  8,  15, 8,  /* 0x00 - 0x0F */
 				8,  8,  8,  8,  8,  8,  15, 8,      8,  8,  8,  8,  8,  8,  15, 8,  /* 0x10 - 0x1F */
 				8,  8,  8,  8,  8,  8,  15, 8,      8,  8,  8,  8,  8,  8,  15, 8,  /* 0x20 - 0x2F */
 				8,  8,  8,  8,  8,  8,  15, 8,      8,  8,  8,  8,  8,  8,  15, 8,  /* 0x30 - 0x3F */
@@ -77,9 +71,9 @@ namespace Essgee.Emulation.CPU
 				8,  8,  8,  8,  8,  8,  15, 8,      8,  8,  8,  8,  8,  8,  15, 8   /* 0xF0 - 0xFF */
 			};
 
-			public static readonly int[] PrefixDDFD = new int[]
-			{
-				0,  0,  0,  0,  0,  0,  0,  0,      0,  15, 0,  0,  0,  0,  0,  0,  /* 0x00 - 0x0F */
+            public static readonly int[] PrefixDDFD = new int[]
+            {
+                0,  0,  0,  0,  0,  0,  0,  0,      0,  15, 0,  0,  0,  0,  0,  0,  /* 0x00 - 0x0F */
 				0,  0,  0,  0,  0,  0,  0,  0,      0,  15, 0,  0,  0,  0,  0,  0,  /* 0x10 - 0x1F */
 				0,  14, 20, 10, 0,  0,  0,  0,      0,  15, 20, 10, 0,  0,  0,  0,  /* 0x20 - 0x2F */
 				0,  0,  0,  0,  23, 23, 19, 0,      0,  15, 0,  0,  0,  0,  0,  0,  /* 0x30 - 0x3F */
@@ -96,6 +90,6 @@ namespace Essgee.Emulation.CPU
 				0,  14, 0,  23, 0,  15, 0,  0,      0,  8,  0,  0,  0,  0,  0,  0,  /* 0xE0 - 0xEF */
 				0,  0,  0,  0,  0,  0,  0,  0,      0,  10, 0,  0,  0,  0,  0,  0   /* 0xF0 - 0xFF */
 			};
-		}
-	}
+        }
+    }
 }

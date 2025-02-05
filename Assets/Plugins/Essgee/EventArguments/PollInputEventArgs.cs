@@ -1,5 +1,4 @@
-﻿using Essgee.Utilities.XInput;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Essgee.EventArguments
