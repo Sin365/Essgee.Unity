@@ -2,6 +2,7 @@
 using Essgee.Emulation.Machines;
 using Essgee.EventArguments;
 using Essgee.Metadata;
+using Essgee.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -129,8 +130,10 @@ namespace Essgee.Emulation
             emulator.Startup();
             emulator.Reset();
 
-            emulationThread = new Thread(ThreadMainLoop) { Name = "EssgeeEmulation", Priority = ThreadPriority.Normal };
-            emulationThread.Start();
+            //不再使用进程推帧
+
+            //emulationThread = new Thread(ThreadMainLoop) { Name = "EssgeeEmulation", Priority = ThreadPriority.Normal };
+            //emulationThread.Start();
         }
 
         public void Reset()
@@ -171,6 +174,9 @@ namespace Essgee.Emulation
 
         public void LoadCartridge(byte[] romData, GameMetadata gameMetadata)
         {
+            //初始化AxiMem
+            AxiMemoryEx.Init();
+
             currentGameMetadata = gameMetadata;
 
             byte[] ramData = new byte[currentGameMetadata.RamSize];
@@ -224,6 +230,30 @@ namespace Essgee.Emulation
         }
 
         public int FramesPerSecond { get; private set; }
+
+        public void Update_Frame()
+        {
+            if (!emulationThreadRunning)
+                return;
+
+            while (pauseStateChangesRequested.Count > 0)
+            {
+                var newPauseState = pauseStateChangesRequested.Dequeue();
+                emulationThreadPaused = newPauseState;
+
+                PauseChanged?.Invoke(this, EventArgs.Empty);
+            }
+
+            emulator.RunFrame();
+
+
+            if (configChangeRequested)
+            {
+                emulator.SetConfiguration(newConfiguration);
+                configChangeRequested = false;
+            }
+
+        }
 
         private void ThreadMainLoop()
         {

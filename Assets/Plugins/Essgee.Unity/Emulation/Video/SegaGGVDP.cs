@@ -7,7 +7,7 @@ using static Essgee.Emulation.Utilities;
 namespace Essgee.Emulation.Video
 {
     /* Sega 315-5378, Game Gear */
-    public class SegaGGVDP : SegaSMSVDP
+    public unsafe class SegaGGVDP : SegaSMSVDP
     {
         protected override int numTotalScanlines => NumTotalScanlinesNtsc;
 
@@ -18,7 +18,8 @@ namespace Essgee.Emulation.Video
 
         public SegaGGVDP() : base()
         {
-            cram = new byte[0x40];
+            //cram = new byte[0x40];
+            cram_set = new byte[0x40];
         }
 
         public override void Reset()
@@ -41,26 +42,27 @@ namespace Essgee.Emulation.Video
 
             /* Create arrays */
             screenUsage = new byte[numVisiblePixels * numVisibleScanlines];
-            outputFramebuffer = new byte[Viewport.Width * Viewport.Height * 4];
+            //outputFramebuffer = new byte[Viewport.Width * Viewport.Height * 4];
+            outputFramebuffer_set = new byte[Viewport.Width * Viewport.Height * 4];
 
             /* Update resolution/display timing */
             UpdateResolution();
         }
 
-        GCHandle? lasyRenderHandle;
+        //GCHandle? lasyRenderHandle;
         protected override void PrepareRenderScreen()
         {
-            // 固定数组，防止垃圾回收器移动它  
-            var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
-            // 获取数组的指针  
-            IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
+            //// 固定数组，防止垃圾回收器移动它  
+            //var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
+            //// 获取数组的指针  
+            //IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
 
-            var eventArgs = RenderScreenEventArgs.Create(numVisiblePixels, numVisibleScanlines, mFrameDataPtr);
+            var eventArgs = RenderScreenEventArgs.Create(numVisiblePixels, numVisibleScanlines, outputFramebuffer_Ptr);
             OnRenderScreen(eventArgs);
             eventArgs.Release();
-            if (lasyRenderHandle != null)
-                lasyRenderHandle.Value.Free();
-            lasyRenderHandle = bitmapcolorRect_handle;
+            //if (lasyRenderHandle != null)
+            //    lasyRenderHandle.Value.Free();
+            //lasyRenderHandle = bitmapcolorRect_handle;
 
             //OnRenderScreen(new RenderScreenEventArgs(Viewport.Width, Viewport.Height, outputFramebuffer.Clone() as byte[]));
         }
@@ -92,7 +94,7 @@ namespace Essgee.Emulation.Video
             WriteColorToFramebuffer((ushort)(cram[cramAddress + 1] << 8 | cram[cramAddress]), address);
         }
 
-        protected override void WriteColorToFramebuffer(ushort colorValue, int address)
+        protected unsafe override void WriteColorToFramebuffer(ushort colorValue, int address)
         {
             RGB444toBGRA8888(colorValue, ref outputFramebuffer, address);
         }

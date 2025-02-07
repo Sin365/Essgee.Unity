@@ -13,8 +13,8 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
 
     void Awake()
     {
-        //AudioClip dummy = AudioClip.Create("dummy", 1, 2, AudioSettings.outputSampleRate, false);
-        AudioClip dummy = AudioClip.Create("dummy", 1, 2, 44100, false);
+        AudioClip dummy = AudioClip.Create("dummy", 1, 2, AudioSettings.outputSampleRate, false);
+        //AudioClip dummy = AudioClip.Create("dummy", 1, 2, 44100, false);
         dummy.SetData(new float[] { 1, 1 }, 0);
         m_as.clip = dummy;
         m_as.loop = true;
@@ -74,7 +74,9 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
 
         for (int i = 0; i < samples_a; i += 2)
         {
-            _buffer.Write(buffer[i] / 32767.0f);
+            //_buffer.Write(buffer[i] / 32767.0f);
+            float data = (uint)(buffer[i] + 32767);
+            _buffer.Write(data / ushort.MaxValue);
             //_buffer.Write(buffer[i] / 32767.0f);
         }
     }

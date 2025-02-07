@@ -8,7 +8,7 @@ using static Essgee.Emulation.Utilities;
 namespace Essgee.Emulation.Video
 {
     /* Texas Instruments TMS99xxA family */
-    public class TMS99xxA : IVideo
+    public unsafe class TMS99xxA : IVideo
     {
         public const int NumTotalScanlinesPal = 313;
         public const int NumTotalScanlinesNtsc = 262;
@@ -48,13 +48,52 @@ namespace Essgee.Emulation.Video
         protected double clockRate, refreshRate;
         protected bool isPalChip;
 
-        [StateRequired]
-        protected byte[] registers, vram;
+        //[StateRequired]
+        //protected byte[] registers, vram;
+
+        #region //指针化 registers
+        static byte[] registers_src;
+        static GCHandle registers_handle;
+        public static byte* registers;
+        public static int registersLength;
+        public static bool registers_IsNull => registers == null;
+        public static byte[] registers_set
+        {
+            set
+            {
+                registers_handle.ReleaseGCHandle();
+                registers_src = value;
+                registersLength = value.Length;
+                registers_src.GetObjectPtr(ref registers_handle, ref registers);
+            }
+        }
+        #endregion
+
+        #region //指针化 vram
+        static byte[] vram_src;
+        static GCHandle vram_handle;
+        public static byte* vram;
+        public static int vramLength;
+        public static bool vram_IsNull => vram == null;
+        public static byte[] vram_set
+        {
+            set
+            {
+                vram_handle.ReleaseGCHandle();
+                vram_src = value;
+                vramLength = value.Length;
+                vram_src.GetObjectPtr(ref vram_handle, ref vram);
+            }
+        }
+        #endregion
+
         [StateRequired]
         protected (int Number, int Y, int X, int Pattern, int Attribute)[][] spriteBuffer;
 
-        protected ushort vramMask16k => 0x3FFF;
-        protected ushort vramMask4k => 0x0FFF;
+        //protected ushort vramMask16k => 0x3FFF;
+        //protected ushort vramMask4k => 0x0FFF;
+        protected const ushort vramMask16k = 0x3FFF;
+        protected const ushort vramMask4k = 0x0FFF;
 
         [StateRequired]
         protected bool isSecondControlWrite;
@@ -64,6 +103,7 @@ namespace Essgee.Emulation.Video
         protected byte readBuffer;
 
         protected byte codeRegister => (byte)((controlWord >> 14) & 0x03);
+        
         protected ushort addressRegister
         {
             get { return (ushort)(controlWord & 0x3FFF); }
@@ -156,7 +196,29 @@ namespace Essgee.Emulation.Video
 
         [StateRequired]
         protected int cycleCount;
-        protected byte[] outputFramebuffer;
+        //protected byte[] outputFramebuffer;
+
+        #region //指针化 outputFramebuffer
+        static byte[] outputFramebuffer_src;
+        static GCHandle outputFramebuffer_handle;
+        public static IntPtr outputFramebuffer_Ptr;
+        public static byte* outputFramebuffer;
+        public static int outputFramebufferLength;
+        public static bool outputFramebuffer_IsNull => outputFramebuffer == null;
+        public static byte[] outputFramebuffer_set
+        {
+            set
+            {
+
+                outputFramebuffer_handle.ReleaseGCHandle();
+                outputFramebuffer_src = value;
+                outputFramebufferLength = value.Length;
+                outputFramebuffer_src.GetObjectPtr(ref outputFramebuffer_handle, ref outputFramebuffer);
+                outputFramebuffer_Ptr = outputFramebuffer_handle.AddrOfPinnedObject();
+            }
+        }
+        #endregion
+
 
         protected int clockCyclesPerLine;
 
@@ -171,8 +233,10 @@ namespace Essgee.Emulation.Video
 
         public TMS99xxA()
         {
-            registers = new byte[0x08];
-            vram = new byte[0x4000];
+            //registers = new byte[0x08];
+            //vram = new byte[0x4000];
+            registers_set = new byte[0x08];
+            vram_set = new byte[0x4000];
 
             spriteBuffer = new (int Number, int Y, int X, int Pattern, int Attribute)[NumActiveScanlines][];
             for (int i = 0; i < spriteBuffer.Length; i++) spriteBuffer[i] = new (int Number, int Y, int X, int Pattern, int Attribute)[NumSpritesPerLine];
@@ -218,8 +282,10 @@ namespace Essgee.Emulation.Video
 
         public virtual void Reset()
         {
-            for (int i = 0; i < registers.Length; i++) registers[i] = 0;
-            for (int i = 0; i < vram.Length; i++) vram[i] = 0;
+            //for (int i = 0; i < registers.Length; i++) registers[i] = 0;
+            //for (int i = 0; i < vram.Length; i++) vram[i] = 0;
+            for (int i = 0; i < registersLength; i++) registers[i] = 0;
+            for (int i = 0; i < vramLength; i++) vram[i] = 0;
 
             for (int i = 0; i < spriteBuffer.Length; i++)
                 for (int j = 0; j < spriteBuffer[i].Length; j++)
@@ -266,7 +332,8 @@ namespace Essgee.Emulation.Video
 
             /* Create arrays */
             screenUsage = new byte[numVisiblePixels * numVisibleScanlines];
-            outputFramebuffer = new byte[(numVisiblePixels * numVisibleScanlines) * 4];
+            //outputFramebuffer = new byte[(numVisiblePixels * numVisibleScanlines) * 4];
+            outputFramebuffer_set = new byte[(numVisiblePixels * numVisibleScanlines) * 4];
 
             /* Scanline parameters */
             if (!isPalChip)
@@ -337,19 +404,19 @@ namespace Essgee.Emulation.Video
             }
         }
 
-        GCHandle? lasyRenderHandle;
+        //GCHandle? lasyRenderHandle;
         protected virtual void PrepareRenderScreen()
         {
-            // 固定数组，防止垃圾回收器移动它  
-            var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
-            // 获取数组的指针  
-            IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
-            var eventArgs = RenderScreenEventArgs.Create(numVisiblePixels, numVisibleScanlines, mFrameDataPtr);
+            //// 固定数组，防止垃圾回收器移动它  
+            //var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
+            //// 获取数组的指针  
+            //IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
+            var eventArgs = RenderScreenEventArgs.Create(numVisiblePixels, numVisibleScanlines, outputFramebuffer_Ptr);
             OnRenderScreen(eventArgs);
             eventArgs.Release();
-            if (lasyRenderHandle != null)
-                lasyRenderHandle.Value.Free();
-            lasyRenderHandle = bitmapcolorRect_handle;
+            //if (lasyRenderHandle != null)
+            //    lasyRenderHandle.Value.Free();
+            //lasyRenderHandle = bitmapcolorRect_handle;
             //OnRenderScreen(new RenderScreenEventArgs(numVisiblePixels, numVisibleScanlines, outputFramebuffer.Clone() as byte[]));
         }
 

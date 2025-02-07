@@ -44,7 +44,8 @@ public class Essgeeinit : MonoBehaviour
         uegResources = new UEGResources();
         uegLog = new UEGLog();
         InitAll(uegResources, Application.persistentDataPath);
-        LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
+        LoadAndRunCartridge("G:/psjapa.sms");
+        //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
         //LoadAndRunCartridge("G:/SML2.gb");
     }
 
@@ -59,6 +60,8 @@ public class Essgeeinit : MonoBehaviour
         if (!emulatorHandler.IsRunning)
             return;
         mUniKeyboard.UpdateInputKey();
+
+        emulatorHandler.Update_Frame();
     }
 
     void InitAll(IGameMetaReources metaresources,string CustonDataDir)
@@ -343,6 +346,7 @@ public class Essgeeinit : MonoBehaviour
 
     private void LoadAndRunCartridge(string fileName)
     {
+        //Application.targetFrameRate = 60;
         try
         {
             var (machineType, romData) = CartridgeLoader.Load(fileName, "ROM image");

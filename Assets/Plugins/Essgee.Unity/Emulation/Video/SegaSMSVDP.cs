@@ -8,7 +8,7 @@ using static Essgee.Emulation.Utilities;
 namespace Essgee.Emulation.Video
 {
     /* Sega 315-5124 (Mark III, SMS) and 315-5246 (SMS 2); differences see 'VDPDIFF' comments */
-    public class SegaSMSVDP : TMS99xxA
+    public unsafe class SegaSMSVDP : TMS99xxA
     {
         /* VDPDIFF: switch for Mk3/SMS1 vs SMS2/GG behavior; configurable via SetRevision, maybe still split into separate classes instead? */
         protected VDPTypes vdpType = VDPTypes.Mk3SMS1;
@@ -23,8 +23,27 @@ namespace Essgee.Emulation.Video
         public const int PortVCounter = 0x40;       // 0x7E canonically, but mirrored across bus
         public const int PortHCounter = 0x41;       // 0x7F canonically, but mirrored across bus
 
-        [StateRequired]
-        protected byte[] cram;
+        //[StateRequired]
+        //protected byte[] cram;
+
+        #region //指针化 cram
+        static byte[] cram_src;
+        static GCHandle cram_handle;
+        public static byte* cram;
+        public static int cramLength;
+        public static bool cram_IsNull => cram == null;
+        public static byte[] cram_set
+        {
+            set
+            {
+                cram_handle.ReleaseGCHandle();
+                cram_src = value;
+                cramLength = value.Length;
+                cram_src.GetObjectPtr(ref cram_handle, ref cram);
+            }
+        }
+        #endregion
+
 
         [StateRequired]
         protected int vCounter, hCounter;
@@ -330,8 +349,10 @@ namespace Essgee.Emulation.Video
 
         public SegaSMSVDP() : base()
         {
-            registers = new byte[0x0B];
-            cram = new byte[0x20];
+            //registers = new byte[0x0B];
+            //cram = new byte[0x20];
+            registers_set = new byte[0x0B];
+            cram_set = new byte[0x20];
 
             spriteBuffer = new (int Number, int Y, int X, int Pattern, int Attribute)[NumActiveScanlinesHigh][];
             for (int i = 0; i < spriteBuffer.Length; i++) spriteBuffer[i] = new (int Number, int Y, int X, int Pattern, int Attribute)[NumSpritesPerLineMode4];
@@ -353,7 +374,8 @@ namespace Essgee.Emulation.Video
             WriteRegister(0x09, 0x00);
             WriteRegister(0x0A, 0xFF);
 
-            for (int i = 0; i < cram.Length; i++) cram[i] = 0;
+            //for (int i = 0; i < cram.Length; i++) cram[i] = 0;
+            for (int i = 0; i < cramLength; i++) cram[i] = 0;
 
             vCounter = hCounter = 0;
             lineInterruptCounter = registers[0x0A];
@@ -379,7 +401,8 @@ namespace Essgee.Emulation.Video
 
             /* Create arrays */
             screenUsage = new byte[numVisiblePixels * numVisibleScanlines];
-            outputFramebuffer = new byte[(numVisiblePixels * numVisibleScanlines) * 4];
+            //outputFramebuffer = new byte[(numVisiblePixels * numVisibleScanlines) * 4];
+            outputFramebuffer_set = new byte[(numVisiblePixels * numVisibleScanlines) * 4];
 
             /* Update resolution/display timing */
             UpdateResolution();
@@ -439,20 +462,21 @@ namespace Essgee.Emulation.Video
             }
         }
 
-        GCHandle? lasyRenderHandle;
+        //GCHandle? lasyRenderHandle;
         protected override void PrepareRenderScreen()
         {
             // 固定数组，防止垃圾回收器移动它  
-            var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
-            // 获取数组的指针  
-            IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
+            //var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer.Clone() as byte[], GCHandleType.Pinned);
+            //var bitmapcolorRect_handle = GCHandle.Alloc(outputFramebuffer, GCHandleType.Pinned);
+            //// 获取数组的指针  
+            //IntPtr mFrameDataPtr = bitmapcolorRect_handle.AddrOfPinnedObject();
 
-            var eventArgs = RenderScreenEventArgs.Create(numVisiblePixels, numVisibleScanlines, mFrameDataPtr);
+            var eventArgs = RenderScreenEventArgs.Create(numVisiblePixels, numVisibleScanlines, outputFramebuffer_Ptr);
             OnRenderScreen(eventArgs);
             eventArgs.Release();
-            if (lasyRenderHandle != null)
-                lasyRenderHandle.Value.Free();
-            lasyRenderHandle = bitmapcolorRect_handle;
+            //if (lasyRenderHandle != null)
+            //    lasyRenderHandle.Value.Free();
+            //lasyRenderHandle = bitmapcolorRect_handle;
 
             //OnRenderScreen(new RenderScreenEventArgs(numVisiblePixels, numVisibleScanlines, outputFramebuffer.Clone() as byte[]));
         }
@@ -868,7 +892,7 @@ namespace Essgee.Emulation.Video
             WriteColorToFramebuffer(cram[((palette * 16) + color)], address);
         }
 
-        protected override void WriteColorToFramebuffer(ushort colorValue, int address)
+        protected unsafe override void WriteColorToFramebuffer(ushort colorValue, int address)
         {
             /* If not in Master System video mode, color value is index into legacy colormap */
             if (!isBitM4Set)
@@ -925,7 +949,8 @@ namespace Essgee.Emulation.Video
 
         protected override void WriteRegister(byte register, byte value)
         {
-            if (register < registers.Length)
+            //if (register < registers.Length)
+            if (register < registersLength)
                 registers[register] = value;
 
             if (register == 0x00 || register == 0x01)
