@@ -346,7 +346,7 @@ public class Essgeeinit : MonoBehaviour
 
     private void LoadAndRunCartridge(string fileName)
     {
-        //Application.targetFrameRate = 60;
+        Application.targetFrameRate = 60;
         try
         {
             var (machineType, romData) = CartridgeLoader.Load(fileName, "ROM image");
@@ -698,7 +698,7 @@ public class Essgeeinit : MonoBehaviour
         }
     }
 
-    public void EnqueueSoundSamples(object sender, EnqueueSamplesEventArgs e)
+    public unsafe void EnqueueSoundSamples(object sender, EnqueueSamplesEventArgs e)
     {
         //if (sampleQueue.Count > MaxQueueLength)
         //{
@@ -718,7 +718,8 @@ public class Essgeeinit : MonoBehaviour
         //}
 
         //TODO “Ù∆µ¥¶¿Ì
-        soundHandler.SubmitSamples(e.MixedSamples, e.ChannelSamples, e.MixedSamples.Length);
+        //soundHandler.SubmitSamples(e.MixedSamples, e.ChannelSamples, e.MixedSamples.Length);
+        soundHandler.SubmitSamples(e.MixedSamples, e.ChannelSamples, e.MixedSamplesLength);
     }
     #endregion
 }

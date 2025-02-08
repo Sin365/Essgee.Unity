@@ -56,7 +56,7 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
         }
     }
 
-    public void SubmitSamples(short[] buffer, short[][] ChannelSamples, int samples_a)
+    public unsafe void SubmitSamples(short* buffer, short*[] ChannelSamples, int samples_a)
     {
         var current = Essgeeinit.sw.Elapsed;
         var delta = current - lastElapsed;
@@ -74,9 +74,7 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
 
         for (int i = 0; i < samples_a; i += 2)
         {
-            //_buffer.Write(buffer[i] / 32767.0f);
-            float data = (uint)(buffer[i] + 32767);
-            _buffer.Write(data / ushort.MaxValue);
+            _buffer.Write(buffer[i] / 32767.0f);
             //_buffer.Write(buffer[i] / 32767.0f);
         }
     }

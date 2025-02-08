@@ -4,10 +4,11 @@ using Essgee.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Essgee.Emulation.Audio
 {
-    public partial class DMGAudio : IAudio
+    public unsafe partial class DMGAudio : IAudio
     {
         // https://gbdev.gg8.se/wiki/articles/Gameboy_sound_hardware
         // http://emudev.de/gameboy-emulator/bleeding-ears-time-to-add-audio/
@@ -34,8 +35,55 @@ namespace Essgee.Emulation.Audio
 
         protected int frameSequencerReload, frameSequencerCounter, frameSequencer;
 
-        protected List<short>[] channelSampleBuffer;
-        protected List<short> mixedSampleBuffer;
+        //protected List<short>[] channelSampleBuffer;
+        #region //指针化 channelSampleBuffer
+        static short[][] channelSampleBuffer_src;
+        static GCHandle[] channelSampleBuffer_handle;
+        public static short*[] channelSampleBuffer;
+        public static int[] channelSampleBufferLength;
+        public static int channelSampleBuffer_writePos;
+        public static bool channelSampleBuffer_IsNull => channelSampleBuffer == null;
+        public static void channelSampleBuffer_Init(int length1, int Lenght2)
+        {
+            if (channelSampleBuffer_src != null)
+            {
+                for (int i = 0; i < channelSampleBuffer_src.Length; i++)
+                    channelSampleBuffer_handle[i].ReleaseGCHandle();
+            }
+
+            channelSampleBuffer_src = new short[length1][];
+            channelSampleBuffer_handle = new GCHandle[length1];
+            channelSampleBuffer = new short*[length1];
+            channelSampleBuffer_writePos = 0;
+            for (int i = 0; i < channelSampleBuffer_src.Length; i++)
+            {
+                channelSampleBuffer_src[i] = new short[Lenght2];
+                channelSampleBuffer_src[i].GetObjectPtr(ref channelSampleBuffer_handle[i], ref channelSampleBuffer[i]);
+            }
+        }
+        #endregion
+        //protected List<short> mixedSampleBuffer;
+
+        #region //指针化 mixedSampleBuffer
+        short[] mixedSampleBuffer_src;
+        GCHandle mixedSampleBuffer_handle;
+        public short* mixedSampleBuffer;
+        public int mixedSampleBufferLength;
+        public int mixedSampleBuffer_writePos;
+        public bool mixedSampleBuffer_IsNull => mixedSampleBuffer == null;
+        public short[] mixedSampleBuffer_set
+        {
+            set
+            {
+                mixedSampleBuffer_handle.ReleaseGCHandle();
+                mixedSampleBuffer_src = value;
+                mixedSampleBufferLength = value.Length;
+                mixedSampleBuffer_writePos = 0;
+                mixedSampleBuffer_src.GetObjectPtr(ref mixedSampleBuffer_handle, ref mixedSampleBuffer);
+            }
+        }
+        #endregion
+
         public virtual event EventHandler<EnqueueSamplesEventArgs> EnqueueSamples;
         public virtual void OnEnqueueSamples(EnqueueSamplesEventArgs e) { EnqueueSamples?.Invoke(this, e); }
 
@@ -60,10 +108,14 @@ namespace Essgee.Emulation.Audio
 
         public DMGAudio()
         {
-            channelSampleBuffer = new List<short>[numChannels];
-            for (int i = 0; i < numChannels; i++) channelSampleBuffer[i] = new List<short>();
+            //channelSampleBuffer = new List<short>[numChannels];
+            //for (int i = 0; i < numChannels; i++) channelSampleBuffer[i] = new List<short>();
+            //mixedSampleBuffer = new List<short>();
 
-            mixedSampleBuffer = new List<short>();
+            //改为二维数组
+            channelSampleBuffer_Init(numChannels, 1470);
+            mixedSampleBuffer_set = new short[1470];
+
 
             channel1 = new Square(true);
             channel2 = new Square(false);
@@ -263,13 +315,22 @@ namespace Essgee.Emulation.Audio
                 sampleCycleCount -= cyclesPerSample;
             }
 
-            if (mixedSampleBuffer.Count >= (samplesPerFrame * numOutputChannels))
+            //if (mixedSampleBuffer.Count >= (samplesPerFrame * numOutputChannels))
+            if (mixedSampleBuffer_writePos >= (samplesPerFrame * numOutputChannels))
             {
+                //EnqueueSamplesEventArgs eventArgs = EnqueueSamplesEventArgs.Create(
+                //    numChannels,
+                //    channelSampleBuffer.Select(x => x.ToArray()).ToArray(),
+                //    new bool[] { !channel1ForceEnable, !channel2ForceEnable, !channel3ForceEnable, !channel4ForceEnable },
+                //    mixedSampleBuffer.ToArray());
+
                 EnqueueSamplesEventArgs eventArgs = EnqueueSamplesEventArgs.Create(
                     numChannels,
-                    channelSampleBuffer.Select(x => x.ToArray()).ToArray(),
+                    channelSampleBuffer,
                     new bool[] { !channel1ForceEnable, !channel2ForceEnable, !channel3ForceEnable, !channel4ForceEnable },
-                    mixedSampleBuffer.ToArray());
+                    mixedSampleBuffer,
+                    mixedSampleBuffer_writePos);
+
                 OnEnqueueSamples(eventArgs);
 
                 FlushSamples();
@@ -295,10 +356,18 @@ namespace Essgee.Emulation.Audio
                 var ch3 = (short)(((channel3Enable[i] ? channel3.OutputVolume : 0) * (volumeRightLeft[i] + 1)) << 8);
                 var ch4 = (short)(((channel4Enable[i] ? channel4.OutputVolume : 0) * (volumeRightLeft[i] + 1)) << 8);
 
-                channelSampleBuffer[0].Add(ch1);
-                channelSampleBuffer[1].Add(ch2);
-                channelSampleBuffer[2].Add(ch3);
-                channelSampleBuffer[3].Add(ch4);
+                //废弃旧的数组方式
+                //channelSampleBuffer[0].Add(ch1);
+                //channelSampleBuffer[1].Add(ch2);
+                //channelSampleBuffer[2].Add(ch3);
+                //channelSampleBuffer[3].Add(ch4);
+
+                //二维指针下标
+                channelSampleBuffer_writePos++;
+                channelSampleBuffer[0][channelSampleBuffer_writePos] = ch1;
+                channelSampleBuffer[1][channelSampleBuffer_writePos] = ch2;
+                channelSampleBuffer[2][channelSampleBuffer_writePos] = ch3;
+                channelSampleBuffer[3][channelSampleBuffer_writePos] = ch4;
 
                 /* Mix samples */
                 var mixed = 0;
@@ -308,16 +377,22 @@ namespace Essgee.Emulation.Audio
                 if (channel4ForceEnable) mixed += ch4;
                 mixed /= numChannels;
 
-                mixedSampleBuffer.Add((short)mixed);
+                //废弃旧的方式
+                //mixedSampleBuffer.Add((short)mixed);
+                //指针下标
+                mixedSampleBuffer_writePos++;
+                mixedSampleBuffer[mixedSampleBuffer_writePos] = (short)mixed;
             }
         }
 
         public void FlushSamples()
         {
-            for (int i = 0; i < numChannels; i++)
-                channelSampleBuffer[i].Clear();
+            //for (int i = 0; i < numChannels; i++)
+            //    channelSampleBuffer[i].Clear();
+            channelSampleBuffer_writePos = 0;
 
-            mixedSampleBuffer.Clear();
+            //mixedSampleBuffer.Clear();
+            mixedSampleBuffer_writePos = 0;
         }
 
         public virtual byte ReadPort(byte port)

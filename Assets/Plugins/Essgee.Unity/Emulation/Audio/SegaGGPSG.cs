@@ -2,7 +2,7 @@
 
 namespace Essgee.Emulation.Audio
 {
-    public class SegaGGPSG : SegaSMSPSG
+    public unsafe class SegaGGPSG : SegaSMSPSG
     {
         public const int PortStereoControl = 0x06;
 
@@ -34,10 +34,19 @@ namespace Essgee.Emulation.Audio
                 var ch3 = (channel2Enable[i] ? (short)(volumeTable[volumeRegisters[2]] * ((toneRegisters[2] < 2 ? true : channelOutput[2]) ? 1.0 : 0.0)) : (short)0);
                 var ch4 = (channel3Enable[i] ? (short)(volumeTable[volumeRegisters[3]] * (noiseLfsr & 0x1)) : (short)0);
 
-                channelSampleBuffer[0].Add(ch1);
-                channelSampleBuffer[1].Add(ch2);
-                channelSampleBuffer[2].Add(ch3);
-                channelSampleBuffer[3].Add(ch4);
+
+                //废弃旧的数组方式
+                //channelSampleBuffer[0].Add(ch1);
+                //channelSampleBuffer[1].Add(ch2);
+                //channelSampleBuffer[2].Add(ch3);
+                //channelSampleBuffer[3].Add(ch4);
+
+                //二维指针下标
+                channelSampleBuffer_writePos++;
+                channelSampleBuffer[0][channelSampleBuffer_writePos] = ch1;
+                channelSampleBuffer[1][channelSampleBuffer_writePos] = ch2;
+                channelSampleBuffer[2][channelSampleBuffer_writePos] = ch3;
+                channelSampleBuffer[3][channelSampleBuffer_writePos] = ch4;
 
                 /* Mix samples */
                 var mixed = 0;
@@ -47,7 +56,11 @@ namespace Essgee.Emulation.Audio
                 if (channel4ForceEnable) mixed += ch4;
                 mixed /= numChannels;
 
-                mixedSampleBuffer.Add((short)mixed);
+                //废弃旧的方式
+                //mixedSampleBuffer.Add((short)mixed);
+                //指针下标
+                mixedSampleBuffer_writePos++;
+                mixedSampleBuffer[mixedSampleBuffer_writePos] = (short)mixed;
             }
         }
 

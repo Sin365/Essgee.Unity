@@ -6,10 +6,13 @@ namespace Essgee.Emulation.Audio
     {
         public CGBAudio()
         {
-            channelSampleBuffer = new List<short>[numChannels];
-            for (int i = 0; i < numChannels; i++) channelSampleBuffer[i] = new List<short>();
+            //channelSampleBuffer = new List<short>[numChannels];
+            //for (int i = 0; i < numChannels; i++) channelSampleBuffer[i] = new List<short>();
+            //mixedSampleBuffer = new List<short>();
 
-            mixedSampleBuffer = new List<short>();
+            //改为二维数组
+            channelSampleBuffer_Init(numChannels, 1470);
+            mixedSampleBuffer_set = new short[1470];
 
             channel1 = new Square(true);
             channel2 = new Square(false);
