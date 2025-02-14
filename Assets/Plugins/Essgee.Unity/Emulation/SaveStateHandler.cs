@@ -14,7 +14,7 @@ namespace Essgee.Emulation
     {
         public static string ExpectedVersion = $"ESGST{new Version(EmuStandInfo.ProductVersion).Major:D3}";
 
-        public static Dictionary<string, dynamic> Load(Stream stream, string machineName)
+        public static Dictionary<string, object> Load(Stream stream, string machineName)
         {
             stream.Position = 0;
 
@@ -45,12 +45,12 @@ namespace Essgee.Emulation
 
                     /* Read state data */
                     var binaryFormatter = new BinaryFormatter();
-                    return (binaryFormatter.Deserialize(stateStream) as Dictionary<string, dynamic>);
+                    return (binaryFormatter.Deserialize(stateStream) as Dictionary<string, object>);
                 }
             }
         }
 
-        public static void Save(Stream stream, string machineName, Dictionary<string, dynamic> state)
+        public static void Save(Stream stream, string machineName, Dictionary<string, object> state)
         {
             using (var writer = new BinaryWriter(new MemoryStream()))
             {

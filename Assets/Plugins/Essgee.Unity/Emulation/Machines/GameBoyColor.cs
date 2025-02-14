@@ -363,19 +363,19 @@ namespace Essgee.Emulation.Machines
             audio?.Shutdown();
         }
 
-        public void SetState(Dictionary<string, dynamic> state)
+        public void SetState(Dictionary<string, object> state)
         {
             throw new NotImplementedException();
         }
 
-        public Dictionary<string, dynamic> GetState()
+        public Dictionary<string, object> GetState()
         {
             throw new NotImplementedException();
         }
 
-        public Dictionary<string, dynamic> GetDebugInformation()
+        public Dictionary<string, object> GetDebugInformation()
         {
-            var dict = new Dictionary<string, dynamic>
+            var dict = new Dictionary<string, object>
             {
                 { "CyclesInFrame", currentMasterClockCyclesInFrame },
             };

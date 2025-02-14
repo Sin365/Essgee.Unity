@@ -26,7 +26,7 @@ namespace Essgee.Emulation.Machines
         double PixelAspectRatio { get; }
         (string Name, string Description)[] RuntimeOptions { get; }
 
-        Dictionary<string, dynamic> GetDebugInformation();
+        Dictionary<string, object> GetDebugInformation();
 
         void SetConfiguration(IConfiguration config);
 
@@ -38,8 +38,8 @@ namespace Essgee.Emulation.Machines
         void Reset();
         void Shutdown();
 
-        void SetState(Dictionary<string, dynamic> state);
-        Dictionary<string, dynamic> GetState();
+        void SetState(Dictionary<string, object> state);
+        Dictionary<string, object> GetState();
 
         void Load(byte[] romData, byte[] ramData, Type mapperType);
         byte[] GetCartridgeRam();

@@ -204,7 +204,7 @@ namespace Essgee.Emulation
             }
         }
 
-        public Dictionary<string, dynamic> GetDebugInformation()
+        public Dictionary<string, object> GetDebugInformation()
         {
             return emulator.GetDebugInformation();
         }

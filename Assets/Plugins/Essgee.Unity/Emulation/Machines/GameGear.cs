@@ -268,9 +268,9 @@ namespace Essgee.Emulation.Machines
             ReconfigureSystem();
         }
 
-        public Dictionary<string, dynamic> GetState()
+        public Dictionary<string, object> GetState()
         {
-            return new Dictionary<string, dynamic>
+            return new Dictionary<string, object>
             {
                 [nameof(configuration.Region)] = configuration.Region,
 
@@ -296,9 +296,9 @@ namespace Essgee.Emulation.Machines
             };
         }
 
-        public Dictionary<string, dynamic> GetDebugInformation()
+        public Dictionary<string, object> GetDebugInformation()
         {
-            var dict = new Dictionary<string, dynamic>
+            var dict = new Dictionary<string, object>
             {
                 { "CyclesInFrame", currentMasterClockCyclesInFrame },
             };
