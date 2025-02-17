@@ -5,7 +5,6 @@ using Essgee.Metadata;
 using Essgee.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 

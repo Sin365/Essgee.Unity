@@ -263,7 +263,7 @@ namespace Essgee.Emulation.Machines
             vdp.LoadAxiStatus(data.ClassData[nameof(vdp)]);
             psg.LoadAxiStatus(data.ClassData[nameof(psg)]);
 
-            portControls1 = BitConverter.ToUInt16( data.MemberData[nameof(portControls1)]);
+            portControls1 = BitConverter.ToUInt16(data.MemberData[nameof(portControls1)]);
             portControls2 = BitConverter.ToUInt16(data.MemberData[nameof(portControls2)]);
             controlsReadMode = data.MemberData[nameof(controlsReadMode)].First();
             isNmi = BitConverter.ToBoolean(data.MemberData[nameof(isNmi)]);

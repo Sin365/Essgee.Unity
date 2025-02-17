@@ -326,14 +326,14 @@ namespace Essgee.Emulation.Machines
         {
             AxiEssgssStatusData data = new AxiEssgssStatusData();
             data.MemberData[nameof(configuration.Region)] = configuration.Region.ToByteArray();
-            
+
             data.ClassData[nameof(bootstrap)] = bootstrap.SaveAxiStatus();
             data.ClassData[nameof(cartridge)] = cartridge.SaveAxiStatus();
             data.MemberData[nameof(wram)] = wram;
             data.ClassData[nameof(cpu)] = cpu.SaveAxiStatus();
             data.ClassData[nameof(vdp)] = vdp.SaveAxiStatus();
             data.ClassData[nameof(psg)] = psg.SaveAxiStatus();
-            
+
             data.MemberData[nameof(portMemoryControl)] = BitConverter.GetBytes(portMemoryControl);
             data.MemberData[nameof(portIoControl)] = BitConverter.GetBytes(portIoControl);
             data.MemberData[nameof(hCounterLatched)] = BitConverter.GetBytes(hCounterLatched);

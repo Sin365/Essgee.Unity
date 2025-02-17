@@ -2,12 +2,9 @@
 using Essgee.Exceptions;
 using Essgee.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using UnityEngine.Playables;
 using static Essgee.Emulation.Utilities;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 namespace Essgee.Emulation.Audio
 {
@@ -188,7 +185,7 @@ namespace Essgee.Emulation.Audio
             data.MemberData[nameof(channelCounters)] = channelCounters.ToByteArray();
             data.MemberData[nameof(channelOutput)] = channelOutput.ToByteArray();
 
-            data.MemberData[nameof(latchedChannel)] = BitConverter.GetBytes( latchedChannel);
+            data.MemberData[nameof(latchedChannel)] = BitConverter.GetBytes(latchedChannel);
             data.MemberData[nameof(latchedType)] = BitConverter.GetBytes(latchedType);
 
             data.MemberData[nameof(noiseLfsr)] = BitConverter.GetBytes(noiseLfsr);

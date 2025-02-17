@@ -29,7 +29,7 @@ namespace Essgee.Emulation.Cartridges.Sega
             ramData = data.MemberData[nameof(ramData)];
             pagingRegisters = data.MemberData[nameof(pagingRegisters)];
             bankMask = data.MemberData[nameof(bankMask)].First();
-            isRamEnabled = BitConverter.ToBoolean( data.MemberData[nameof(isRamEnabled)]);
+            isRamEnabled = BitConverter.ToBoolean(data.MemberData[nameof(isRamEnabled)]);
         }
 
         public AxiEssgssStatusData SaveAxiStatus()

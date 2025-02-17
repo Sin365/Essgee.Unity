@@ -1,7 +1,6 @@
 ﻿using Essgee.Exceptions;
 using Essgee.Utilities;
 using System;
-using UnityEngine.Playables;
 
 namespace Essgee.Emulation.Cartridges.Sega
 {

@@ -2,7 +2,6 @@
 using Essgee.Utilities;
 using System;
 using System.Linq;
-using Unity.VisualScripting;
 using static Essgee.Emulation.Utilities;
 
 namespace Essgee.Emulation.CPU

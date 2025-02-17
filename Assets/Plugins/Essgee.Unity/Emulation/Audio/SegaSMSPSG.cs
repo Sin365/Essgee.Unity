@@ -1,7 +1,4 @@
-﻿using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
-using System;
-
-namespace Essgee.Emulation.Audio
+﻿namespace Essgee.Emulation.Audio
 {
     public class SegaSMSPSG : SN76489
     {

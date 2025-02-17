@@ -4,8 +4,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using static Essgee.Emulation.Utilities;
 
 namespace Essgee.Emulation.Video

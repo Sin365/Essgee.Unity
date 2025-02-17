@@ -2,10 +2,7 @@
 using Essgee.Exceptions;
 using Essgee.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using Unity.VisualScripting.Dependencies.Sqlite;
 
 namespace Essgee.Emulation.Audio
 {

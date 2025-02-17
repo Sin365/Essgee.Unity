@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Essgee.Emulation.Machines
 {
-    public interface IMachine:IAxiStatus
+    public interface IMachine : IAxiStatus
     {
         event EventHandler<SendLogMessageEventArgs> SendLogMessage;
         event EventHandler<EventArgs> EmulationReset;

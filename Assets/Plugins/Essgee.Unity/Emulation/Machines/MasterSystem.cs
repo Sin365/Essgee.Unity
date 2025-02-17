@@ -340,9 +340,9 @@ namespace Essgee.Emulation.Machines
         {
             AxiEssgssStatusData data = new AxiEssgssStatusData();
             data.MemberData[nameof(configuration.TVStandard)] = configuration.TVStandard.ToByteArray();
-            data.MemberData[nameof(configuration.Region)] =  configuration.Region.ToByteArray();
+            data.MemberData[nameof(configuration.Region)] = configuration.Region.ToByteArray();
 
-            if(bootstrap != null)
+            if (bootstrap != null)
                 data.ClassData[nameof(bootstrap)] = bootstrap.SaveAxiStatus();
 
             data.ClassData[nameof(cartridge)] = cartridge.SaveAxiStatus();

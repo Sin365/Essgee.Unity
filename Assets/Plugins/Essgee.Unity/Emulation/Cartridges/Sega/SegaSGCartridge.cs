@@ -1,7 +1,6 @@
 ﻿using Essgee.Utilities;
 using System;
 using System.Linq;
-using UnityEngine.Playables;
 
 namespace Essgee.Emulation.Cartridges.Sega
 {
