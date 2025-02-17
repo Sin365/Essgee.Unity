@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting.Dependencies.Sqlite;
 
 namespace Essgee.Emulation.Audio
 {
@@ -129,6 +130,24 @@ namespace Essgee.Emulation.Audio
             channel3ForceEnable = true;
             channel4ForceEnable = true;
         }
+
+
+        #region AxiState
+
+        public void LoadAxiStatus(AxiEssgssStatusData data)
+        {
+            sampleCycleCount = BitConverter.ToInt32(data.MemberData[nameof(sampleCycleCount)]);
+            frameCycleCount = BitConverter.ToInt32(data.MemberData[nameof(frameCycleCount)]);
+        }
+
+        public AxiEssgssStatusData SaveAxiStatus()
+        {
+            AxiEssgssStatusData data = new AxiEssgssStatusData();
+            data.MemberData[nameof(sampleCycleCount)] = BitConverter.GetBytes(sampleCycleCount);
+            data.MemberData[nameof(frameCycleCount)] = BitConverter.GetBytes(frameCycleCount);
+            return data;
+        }
+        #endregion
 
         public object GetRuntimeOption(string name)
         {

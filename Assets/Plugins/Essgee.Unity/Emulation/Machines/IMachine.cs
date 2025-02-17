@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Essgee.Emulation.Machines
 {
-    public interface IMachine
+    public interface IMachine:IAxiStatus
     {
         event EventHandler<SendLogMessageEventArgs> SendLogMessage;
         event EventHandler<EventArgs> EmulationReset;
@@ -38,8 +38,9 @@ namespace Essgee.Emulation.Machines
         void Reset();
         void Shutdown();
 
-        void SetState(Dictionary<string, object> state);
-        Dictionary<string, object> GetState();
+        //void SetState(Dictionary<string, object> state);
+        //Dictionary<string, object> GetState();
+
 
         void Load(byte[] romData, byte[] ramData, Type mapperType);
         byte[] GetCartridgeRam();

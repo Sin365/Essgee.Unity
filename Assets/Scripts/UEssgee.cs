@@ -62,6 +62,15 @@ public class Essgeeinit : MonoBehaviour
         mUniKeyboard.UpdateInputKey();
 
         emulatorHandler.Update_Frame();
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            emulatorHandler.mySaveState(0);
+        }
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            emulatorHandler.myLoadState(0);
+        }
     }
 
     void InitAll(IGameMetaReources metaresources,string CustonDataDir)

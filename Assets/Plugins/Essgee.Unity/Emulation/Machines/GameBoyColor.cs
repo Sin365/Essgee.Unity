@@ -162,6 +162,18 @@ namespace Essgee.Emulation.Machines
 
         public GameBoyColor() { }
 
+        #region AxiState
+
+        public void LoadAxiStatus(AxiEssgssStatusData data)
+        {
+        }
+
+        public AxiEssgssStatusData SaveAxiStatus()
+        {
+            AxiEssgssStatusData data = new AxiEssgssStatusData();
+            return data;
+        }
+        #endregion
         public void Initialize()
         {
             bootstrap = null;

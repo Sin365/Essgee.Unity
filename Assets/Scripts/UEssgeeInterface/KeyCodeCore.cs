@@ -146,6 +146,7 @@ public class KeyCodeCore
             dictKey2Motion.Add(EssgeeUnityKey.P2_BTN_1, machine.configuration.Joypad2Button1);
             dictKey2Motion.Add(EssgeeUnityKey.P2_BTN_2, machine.configuration.Joypad2Button2);
         }
+        //存档功能待补
         else if (Machine is Essgee.Emulation.Machines.GameBoy)
         {
             var machine = (Essgee.Emulation.Machines.GameBoy)Machine;
@@ -168,6 +169,7 @@ public class KeyCodeCore
             dictKey2Motion.Add(EssgeeUnityKey.P1_POTION_1, machine.configuration.ControlsStart);
             dictKey2Motion.Add(EssgeeUnityKey.P1_POTION_2, machine.configuration.ControlsSelect);
         }
+        //存档功能待补
         else if (Machine is Essgee.Emulation.Machines.GameBoyColor)
         {
             var machine = (Essgee.Emulation.Machines.GameBoyColor)Machine;
