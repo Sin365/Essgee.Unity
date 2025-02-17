@@ -65,11 +65,11 @@ public class Essgeeinit : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            emulatorHandler.mySaveState(0);
+            emulatorHandler.SaveSnapShotToFile(0);
         }
         if (Input.GetKeyDown(KeyCode.F6))
         {
-            emulatorHandler.myLoadState(0);
+            emulatorHandler.LoadSnapShotFromFile(0);
         }
     }
 

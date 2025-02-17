@@ -365,7 +365,7 @@ namespace Essgee.Emulation
         //    }
         //}
 
-        public void mySaveState(int stateNumber)
+        public void SaveSnapShotToFile(int stateNumber)
         {
             var statePath = GetSaveStateFilename(stateNumber);
             using (var stream = new FileStream(statePath, FileMode.OpenOrCreate))
@@ -375,7 +375,7 @@ namespace Essgee.Emulation
             }
         }
 
-        public void myLoadState(int stateNumber)
+        public void LoadSnapShotFromFile(int stateNumber)
         {
             var statePath = GetSaveStateFilename(stateNumber);
             if (File.Exists(statePath))
@@ -386,6 +386,16 @@ namespace Essgee.Emulation
                     emulator.LoadAxiStatus(SaveStateHandler.LoadAxiStatus(stream, emulator.GetType().Name));
                 }
             }
+        }
+
+        public byte[] GetStateData()
+        { 
+            return emulator.SaveAxiStatus().ToByteArray();
+        }
+
+        public void SetStateData(byte[] data)
+        {
+            emulator.LoadAxiStatus(data.ToAxiEssgssStatusData());
         }
     }
 }
