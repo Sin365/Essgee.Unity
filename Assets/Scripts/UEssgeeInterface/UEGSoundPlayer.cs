@@ -14,12 +14,6 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
     public double audioFPS { get; private set; }
     public bool IsRecording { get; private set; }
 
-    float lastData = 0;
-
-    private AudioClip audioClip;
-    private int writePos = 0;
-    private float[] buffer;
-
     void Awake()
     {
         // 获取当前音频配置
@@ -44,7 +38,6 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
             Debug.LogError("Failed to update audio settings.");
         }
 
-        GetComponent<AudioSource>().PlayOneShot(audioClip);
     }
 
     private Queue<float> sampleQueue = new Queue<float>();
