@@ -44,9 +44,9 @@ public class Essgeeinit : MonoBehaviour
         uegResources = new UEGResources();
         uegLog = new UEGLog();
         InitAll(uegResources, Application.persistentDataPath);
-        LoadAndRunCartridge("G:/psjapa.sms");
+        //LoadAndRunCartridge("G:/psjapa.sms");
         //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
-        //LoadAndRunCartridge("G:/SML2.gb");
+        LoadAndRunCartridge("G:/SML2.gb");
     }
 
     void OnDisable()
