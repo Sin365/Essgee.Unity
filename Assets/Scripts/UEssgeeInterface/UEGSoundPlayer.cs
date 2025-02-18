@@ -9,7 +9,7 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
 {
     [SerializeField]
     private AudioSource m_as;
-    private RingBuffer<float> _buffer = new RingBuffer<float>(44100*2);
+    private RingBuffer<float> _buffer = new RingBuffer<float>(44100 * 2);
     private TimeSpan lastElapsed;
     public double audioFPS { get; private set; }
     public bool IsRecording { get; private set; }
@@ -20,37 +20,45 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
     private int writePos = 0;
     private float[] buffer;
 
-    void Start()
+    void Awake()
     {
+        // 获取当前音频配置
+        AudioConfiguration config = AudioSettings.GetConfiguration();
+
+        // 设置目标音频配置
+        config.sampleRate = 44100;       // 采样率为 44100Hz
+        config.numRealVoices = 32;      // 设置最大音频源数量（可选）
+        config.numVirtualVoices = 512;   // 设置虚拟音频源数量（可选）
+        config.dspBufferSize = 1024;     // 设置 DSP 缓冲区大小（可选）
+        config.speakerMode = AudioSpeakerMode.Stereo; // 设置为立体声（2 声道）
+
+        // 应用新的音频配置
+        if (AudioSettings.Reset(config))
+        {
+            Debug.Log("Audio settings updated successfully.");
+            Debug.Log("Sample Rate: " + config.sampleRate + "Hz");
+            Debug.Log("Speaker Mode: " + config.speakerMode);
+        }
+        else
+        {
+            Debug.LogError("Failed to update audio settings.");
+        }
+
         GetComponent<AudioSource>().PlayOneShot(audioClip);
     }
 
     private Queue<float> sampleQueue = new Queue<float>();
 
-    // 外部填充数据
-    public void AddData(float[] data)
-    {
-        lock (sampleQueue)
-        {
-            foreach (var sample in data)
-            {
-                sampleQueue.Enqueue(sample);
-            }
-        }
-    }
 
     // Unity 音频线程回调
     void OnAudioFilterRead(float[] data, int channels)
     {
-        lock (sampleQueue)
+        for (int i = 0; i < data.Length; i++)
         {
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (sampleQueue.Count > 0)
-                    data[i] = sampleQueue.Dequeue();
-                else
-                    data[i] = 0; // 无数据时静音
-            }
+            if (_buffer.TryRead(out float rawData))
+                data[i] = rawData;
+            else
+                data[i] = 0; // 无数据时静音
         }
     }
 
@@ -78,29 +86,11 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
         lastElapsed = current;
         audioFPS = 1d / delta.TotalSeconds;
 
-        //for (int i = 0; i < samples_a; i += 1)
-        //{
-        //    //_buffer.Write(((i % 2 == 0)?-1:1) * buffer[i] / 32767.0f);
-        //    _buffer.Write(buffer[i] / 32767.0f);
-
-        //}
-
-        AddData(ConvertShortToFloat(buffer, samples_a));
-
-        if (IsRecording)
+        for (int i = 0; i < samples_a; i += 1)
         {
-            dataChunk.AddSampleData(buffer, samples_a);
-            waveHeader.FileLength += (uint)samples_a;
+            _buffer.Write(buffer[i] / 32767.0f);
+
         }
-    }
-    unsafe float[] ConvertShortToFloat(short* input,int length)
-    {
-        float[] output = new float[length];
-        for (int i = 0; i < length; i++)
-        {
-            output[i] = input[i] / 32768.0f;
-        }
-        return output;
     }
     public void BufferWirte(int Off, byte[] Data)
     {
@@ -312,7 +302,7 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
 
             ChunkSize += (uint)(stereoBuffer.Length * 2);
         }
-        public unsafe void AddSampleData(short* stereoBuffer,int lenght)
+        public unsafe void AddSampleData(short* stereoBuffer, int lenght)
         {
             for (int i = 0; i < lenght; i++)
             {
