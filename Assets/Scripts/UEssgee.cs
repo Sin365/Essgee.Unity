@@ -27,6 +27,7 @@ public class Essgeeinit : MonoBehaviour
     EmulatorHandler emulatorHandler;
     UEGResources uegResources;
     UEGLog uegLog;
+    UEGSaveByteConvert ugeSaveConver;
 
     bool lastUserPauseState;
     (int x, int y, int width, int height) currentViewport;
@@ -43,8 +44,10 @@ public class Essgeeinit : MonoBehaviour
 
         uegResources = new UEGResources();
         uegLog = new UEGLog();
+        ugeSaveConver = new UEGSaveByteConvert();
         InitAll(uegResources, Application.persistentDataPath);
-        LoadAndRunCartridge("G:/psjapa.sms");
+        //LoadAndRunCartridge("G:/psjapa.sms");
+        LoadAndRunCartridge("G:/Phantasy Star (USA, Europe) (Rev A).zip");
         //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
         //LoadAndRunCartridge("G:/SML2.gb");
     }
@@ -409,7 +412,7 @@ public class Essgeeinit : MonoBehaviour
         if (emulatorHandler != null)
             ShutdownEmulation();
 
-        emulatorHandler = new EmulatorHandler(machineType, ExceptionHandler);
+        emulatorHandler = new EmulatorHandler(machineType, ExceptionHandler, ugeSaveConver);
         emulatorHandler.Initialize();
 
         emulatorHandler.SendLogMessage += EmulatorHandler_SendLogMessage;

@@ -84,6 +84,11 @@ public class UEGSoundPlayer : MonoBehaviour//, ISoundPlayer
             _buffer.Write(buffer[i] / 32767.0f);
 
         }
+        if (IsRecording)
+        {
+            dataChunk.AddSampleData(buffer, samples_a);
+            waveHeader.FileLength += (uint)samples_a;
+        }
     }
     public void BufferWirte(int Off, byte[] Data)
     {
