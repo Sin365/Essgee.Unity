@@ -47,9 +47,10 @@ public class Essgeeinit : MonoBehaviour
         ugeSaveConver = new UEGSaveByteConvert();
         InitAll(uegResources, Application.persistentDataPath);
         //LoadAndRunCartridge("G:/psjapa.sms");
-        LoadAndRunCartridge("G:/Phantasy Star (USA, Europe) (Rev A).zip");
+        //LoadAndRunCartridge("G:/Phantasy Star (USA, Europe) (Rev A).zip");
         //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
         //LoadAndRunCartridge("G:/SML2.gb");
+        LoadAndRunCartridge("G:/BaiduNetdiskDownload/¹ÖÊÞÕ½ÂÔ-ÃÔ¹¬±øÍÅÕ½[¼ò]ÐÞÕý°æ1.11.gbc");
     }
 
     void OnDisable()
