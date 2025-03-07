@@ -306,7 +306,8 @@ public class Essgeeinit : MonoBehaviour
     }
     public static void SaveConfiguration()
     {
-        EmuStandInfo.Configuration.SerializeToFile(EmuStandInfo.programConfigPath);
+        //²»ÐèÒª´æ´¢
+        //EmuStandInfo.Configuration.SerializeToFile(EmuStandInfo.programConfigPath);
     }
     #endregion
 
