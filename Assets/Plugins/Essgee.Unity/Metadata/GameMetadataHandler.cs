@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using UnityEngine.Timeline;
 
 namespace Essgee.Metadata
 {
@@ -20,10 +19,11 @@ namespace Essgee.Metadata
 
     public class GameMetadataHandler
     {
+        public static GameMetadataHandler instance;
         //static string datDirectoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "No-Intro");
         //static string metadataDatabaseFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "MetadataDatabase.json");
 
-        IGameMetaReources gameMetaReources;
+        public IGameMetaReources gameMetaReources;
         //readonly Dictionary<string, DatFile> datFiles;
         readonly List<CartridgeJSON> cartMetadataDatabase;
 
@@ -32,6 +32,7 @@ namespace Essgee.Metadata
 
         public GameMetadataHandler(IGameMetaReources metaresources)
         {
+            instance = this;
             gameMetaReources = metaresources;
 
             //if (!gameMetaReources.GetCartMetadataDatabase(out string loadedData))
@@ -355,6 +356,12 @@ namespace Essgee.Metadata
             //cartMetadataDatabase = EmuStandInfo.metadataDatabaseFilePath.DeserializeFromFile<List<CartridgeJSON>>();
 
             ////EssgeeLogger.EnqueueMessageSuccess($"Metadata initialized; {NumKnownGames} game(s) known across {NumKnownSystems} system(s).");
+        }
+
+        ~GameMetadataHandler()
+        {
+            if(instance == this)
+                instance = null;
         }
 
         public GameMetadata GetGameMetadata(string datFilename, string romFilename, uint romCrc32, int romSize)

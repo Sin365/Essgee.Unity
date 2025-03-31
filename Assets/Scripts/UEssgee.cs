@@ -6,7 +6,6 @@ using Essgee.Exceptions;
 using Essgee.Extensions;
 using Essgee.Metadata;
 using Essgee.Utilities;
-using Essgee.Utilities.XInput;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,7 +49,8 @@ public class Essgeeinit : MonoBehaviour
         //LoadAndRunCartridge("G:/Phantasy Star (USA, Europe) (Rev A).zip");
         //LoadAndRunCartridge("G:/Ninja_Gaiden_(UE)_type_A_[!].sms");
         //LoadAndRunCartridge("G:/SML2.gb");
-        LoadAndRunCartridge("G:/BaiduNetdiskDownload/¹ÖÊÞÕ½ÂÔ-ÃÔ¹¬±øÍÅÕ½[¼ò]ÐÞÕý°æ1.11.gbc");
+        LoadAndRunCartridge("G:/SonicTheHedgehog(Japan).zip");
+        //LoadAndRunCartridge("G:/BaiduNetdiskDownload/¹ÖÊÞÕ½ÂÔ-ÃÔ¹¬±øÍÅÕ½[¼ò]ÐÞÕý°æ1.11.gbc");
     }
 
     void OnDisable()
@@ -601,7 +601,7 @@ public class Essgeeinit : MonoBehaviour
         graphicsHandler.SubmitVideo(e.Width, e.Height, e.FrameDataPtr, 0);
 
         // TODO: create emulation "EndOfFrame" event for this?
-        ControllerManager.Update();
+        //ControllerManager.Update();
         //});
     }
 
@@ -697,8 +697,8 @@ public class Essgeeinit : MonoBehaviour
 
     private void EmulatorHandler_EnableRumble(object sender, EventArgs e)
     {
-        if (EmuStandInfo.Configuration.EnableXInput && EmuStandInfo.Configuration.EnableRumble)
-            ControllerManager.GetController(0).Vibrate(0.0f, 0.5f, TimeSpan.FromSeconds(0.1f));
+        //if (EmuStandInfo.Configuration.EnableXInput && EmuStandInfo.Configuration.EnableRumble)
+        //    ControllerManager.GetController(0).Vibrate(0.0f, 0.5f, TimeSpan.FromSeconds(0.1f));
     }
 
     private void EmulatorHandler_PauseChanged(object sender, EventArgs e)

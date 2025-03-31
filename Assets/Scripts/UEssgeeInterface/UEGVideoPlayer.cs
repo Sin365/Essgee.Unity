@@ -98,6 +98,11 @@ public class UEGVideoPlayer : MonoBehaviour
             mWidth = width;
             mHeight = height;
             bHadData = true;
+        } 
+
+        if (mWidth != width && mHeight != height)
+        {
+            
         }
         //Debug.Log($"frame_number -> {frame_number}");
     }
